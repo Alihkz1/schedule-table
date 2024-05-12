@@ -1,1 +1,6 @@
-employee name here
+<div class="w-100 d-flex justify-content-between align-items-center">
+    <span>{{ row.FullName }}</span>
+    <div class="remove p-1" (click)="onRemove()">
+        <img class="remove-icon" src="assets/remove.svg" alt="">
+    </div>
+</div>

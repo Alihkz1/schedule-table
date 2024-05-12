@@ -21,13 +21,15 @@
     <tbody>
         <tr *ngFor="let row of dataSource; let i = index" [ngStyle]="{ 'height' : rowHeight + 'px'}">
             <td *ngFor="let header of headers" class="cell">
-                <ng-container *ngIf="!header.dynamicCellComponent; else dynamicCell">
+                <ng-container *ngIf="header.dynamicCellComponent" [column]="header" [row]="row"
+                    [component]="header.dynamicCellComponent" dynamicCell>
+                </ng-container>
+                <ng-container *ngIf="!header.dynamicCellComponent">
                     <div class="d-flex justify-content-start align-items-center">
                         {{ row[header.key] }}
                     </div>
                 </ng-container>
-                <ng-template #dynamicCell eventOnCreate>
-                </ng-template>
+
             </td>
         </tr>
     </tbody>
