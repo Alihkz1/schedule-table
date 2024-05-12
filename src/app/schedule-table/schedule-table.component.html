@@ -1,0 +1,34 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th *ngFor="let h of headers" [ngStyle]="{ 'min-width' : h.width + 'px'}">
+                <div class="w-100 h-100 d-flex align-items-center justify-content-between ps-1">
+                    {{ h.title }}
+                    <span class="sort" *ngIf="h.sortable">
+                        <ng-container *ngIf="!h.asc">
+                            <img class="sort-icon" src="assets/asc-sort.svg" alt="sort"
+                                (click)="h.asc = true; onSortChange()">
+                        </ng-container>
+                        <ng-container *ngIf="h.asc">
+                            <img class="sort-icon" src="assets/desc-sort.svg" alt="sort"
+                                (click)="h.asc = false; onSortChange()">
+                        </ng-container>
+                    </span>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of dataSource; let i = index" [ngStyle]="{ 'height' : rowHeight + 'px'}">
+            <td *ngFor="let header of headers" class="cell">
+                <ng-container *ngIf="!header.dynamicCellComponent; else dynamicCell">
+                    <div class="d-flex justify-content-start align-items-center">
+                        {{ row[header.key] }}
+                    </div>
+                </ng-container>
+                <ng-template #dynamicCell eventOnCreate>
+                </ng-template>
+            </td>
+        </tr>
+    </tbody>
+</table>
