@@ -10,6 +10,7 @@ import { DEFAULT_END_DATE, DEFAULT_START_DATE } from './shared/constant/date.con
 import { DatePipe } from '@angular/common';
 import { EmployeeNameCellComponent } from './dynamic-cells/employee-name-cell/employee-name-cell.component';
 import { IRowEvent } from './shared/model/IRowEvent.interface';
+import { ShiftCellComponent } from './dynamic-cells/shift-cell/shift-cell.component';
 
 @Component({
   selector: 'app-root',
@@ -82,6 +83,7 @@ export class AppComponent implements OnInit {
       {
         title: '#',
         key: 'i',
+        sortable: true,
         width: 20
       },
       {
@@ -89,18 +91,21 @@ export class AppComponent implements OnInit {
         key: 'FullName',
         dynamicCellComponent: EmployeeNameCellComponent,
         filterable: true,
+        sortable: true,
         width: 250,
       },
       {
         title: 'Trainee',
         key: 'EligibilityToBeTrainee',
         filterable: true,
+        sortable: true,
         width: 150
       },
       {
         title: 'RN Tier',
         key: 'RnTierTitle',
         filterable: true,
+        sortable: true,
         width: 250
       },
     ];
@@ -124,6 +129,7 @@ export class AppComponent implements OnInit {
         title: el ?? '',
         sortable: true,
         width: 250,
+        dynamicCellComponent: ShiftCellComponent
       });
     })
   }

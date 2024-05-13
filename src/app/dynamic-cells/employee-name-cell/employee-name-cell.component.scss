@@ -1,7 +1,16 @@
 .remove {
     cursor: pointer;
-    pad: 5px;
+    opacity: 0;
+    padding: 5px;
     &-icon {
         height: 10px;
     }
+}
+
+.wrapper {
+   &:hover {
+    .remove {
+        opacity: 1;
+    }
+   } 
 }

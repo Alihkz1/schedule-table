@@ -6,12 +6,20 @@ import { IRowEvent } from '../shared/model/IRowEvent.interface';
 import { ScheduleTableFilterColumnComponent } from './schedule-table-filter-column/schedule-table-filter-column.component';
 import { ScheduleTableService } from '../shared/service/schedule-table.service';
 import { Subject, takeUntil } from 'rxjs';
+import { ScheduleTableSortColumnComponent } from './schedule-table-sort-column/schedule-table-sort-column.component';
+import { ShiftCellComponent } from '../dynamic-cells/shift-cell/shift-cell.component';
 
 
 @Component({
   selector: 'schedule-table',
   standalone: true,
-  imports: [CommonModule, DynamicCellDirective, ScheduleTableFilterColumnComponent],
+  imports: [
+    CommonModule,
+    DynamicCellDirective,
+    ScheduleTableFilterColumnComponent,
+    ScheduleTableSortColumnComponent,
+    ShiftCellComponent
+  ],
   templateUrl: './schedule-table.component.html',
   styleUrl: './schedule-table.component.scss'
 })
@@ -21,13 +29,12 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
     this.tableService.setRealDataSource = data;
   }
   @Input() rowHeight = 50;
+  @Input() loading: boolean = false;
   @Output() onRowEvent: EventEmitter<IRowEvent> = new EventEmitter();
 
   private _unSubscribe$ = new Subject<void>();
 
   constructor(public tableService: ScheduleTableService) { }
-
-  sortChange_onClick() { }
 
   ngOnInit(): void {
     this.tableService.columnFiltersObs.pipe(takeUntil(this._unSubscribe$)).subscribe((result) => {

@@ -21,7 +21,10 @@ export class ScheduleTableFilterColumnComponent {
 
   saveFilter_onClick() {
     const formValue = this.formControl.value?.toLowerCase();
-    if (!formValue?.length) return;
+    if (!formValue?.length) {
+      this.popover.close();
+      return;
+    }
     const columnFilters = this.tableService.columnFilters;
     columnFilters[this.header.key] = formValue;
     this.tableService.setColumnFilters = columnFilters;

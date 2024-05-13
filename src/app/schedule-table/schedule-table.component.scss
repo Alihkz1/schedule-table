@@ -5,15 +5,12 @@ th {
     border-right: 1px solid #b5b5b5;
     min-width: 200px;
     height: 55px;
-}
 
-.sort {
-    padding: 5px;
-
-    &-icon {
-        height: 20px;
-        cursor: pointer;
-    }
+    // &:hover {
+    //     .filter-column {
+    //         opacity: 1;
+    //     }
+    // }
 }
 
 .cell {
@@ -24,3 +21,7 @@ th {
     height: 150px;
     width: 274px;
 }
+
+// .filter-column {
+//     opacity: 0;
+// }

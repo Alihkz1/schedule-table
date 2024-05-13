@@ -7,27 +7,24 @@
 
                         {{ header.title }}
 
-                        <!-- sort column  -->
-                        <span class="sort" *ngIf="header.sortable">
-                            <ng-container *ngIf="!header.asc">
-                                <img class="sort-icon" src="assets/asc-sort.svg" alt="sort"
-                                    (click)="header.asc = true; sortChange_onClick()">
-                            </ng-container>
-                            <ng-container *ngIf="header.asc">
-                                <img class="sort-icon" src="assets/desc-sort.svg" alt="sort"
-                                    (click)="header.asc = false; sortChange_onClick()">
-                            </ng-container>
-                        </span>
+                        <!-- sort  -->
+                        <ng-container *ngIf="header.sortable">
+                        <schedule-table-sort-column [header]="header"> 
+                        </schedule-table-sort-column>
+                        </ng-container>
+
                     </div>
 
-                    <!-- filter column -->
-                    <schedule-table-filter-column *ngIf="header.filterable" [header]="header">
-                    </schedule-table-filter-column>
+                    <!-- filter -->
+                    <ng-container *ngIf="header.filterable">
+                        <schedule-table-filter-column class="filter-column" [header]="header">
+                        </schedule-table-filter-column>
+                    </ng-container>
                 </div>
             </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="h-100 w-100">
         <tr *ngFor="let row of tableService.finalDataSource; let i = index" [ngStyle]="{ 'height' : rowHeight + 'px'}">
             <td *ngFor="let header of headers" class="cell">
                 <ng-container *ngIf="header.dynamicCellComponent" [column]="header" [row]="row"
