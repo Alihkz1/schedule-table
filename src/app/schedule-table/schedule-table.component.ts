@@ -45,7 +45,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
       let items: any[] = [];
       Object.keys(result).forEach((key, i) => {
         if (i === 0)
-          items = this.tableService.realDataSource.filter((el) => el[key].toLowerCase().includes(result[key]));
+          items = this.tableService.realDataSource.filter((el) => el[key]?.toLowerCase().includes(result[key]));
         else if (i > 0)
           items = items.filter((el) => el[key].toLowerCase().includes(result[key]));
       });

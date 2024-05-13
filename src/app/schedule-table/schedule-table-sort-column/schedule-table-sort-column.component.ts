@@ -26,8 +26,8 @@ export class ScheduleTableSortColumnComponent {
         if (mode === SORT_ENUM.ASC) return a[this.header.key] - b[this.header.key];
         else return b[this.header.key] - a[this.header.key];
       } else if (typeof a[this.header.key] === 'string') {
-        if (mode === SORT_ENUM.ASC) return a[this.header.key].length - b[this.header.key].length;
-        else return b[this.header.key].length - a[this.header.key].length;
+        if (mode === SORT_ENUM.ASC) return a[this.header.key]?.length - b[this.header.key]?.length;
+        else return b[this.header.key]?.length - a[this.header.key]?.length;
       } else return 0
     });
   }
