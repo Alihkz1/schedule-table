@@ -88,16 +88,19 @@ export class AppComponent implements OnInit {
         title: 'RN Name',
         key: 'FullName',
         dynamicCellComponent: EmployeeNameCellComponent,
-        width: 250
+        filterable: true,
+        width: 250,
       },
       {
         title: 'Trainee',
         key: 'EligibilityToBeTrainee',
+        filterable: true,
         width: 150
       },
       {
         title: 'RN Tier',
         key: 'RnTierTitle',
+        filterable: true,
         width: 250
       },
     ];

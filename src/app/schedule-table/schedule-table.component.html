@@ -21,13 +21,14 @@
                     </div>
 
                     <!-- filter column -->
-                    <schedule-table-filter-column [header]="header"> </schedule-table-filter-column>
+                    <schedule-table-filter-column *ngIf="header.filterable" [header]="header">
+                    </schedule-table-filter-column>
                 </div>
             </th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let row of tableService.dataSource; let i = index" [ngStyle]="{ 'height' : rowHeight + 'px'}">
+        <tr *ngFor="let row of tableService.finalDataSource; let i = index" [ngStyle]="{ 'height' : rowHeight + 'px'}">
             <td *ngFor="let header of headers" class="cell">
                 <ng-container *ngIf="header.dynamicCellComponent" [column]="header" [row]="row"
                     [onRowEvent]="onRowEvent" [component]="header.dynamicCellComponent" dynamicCell>

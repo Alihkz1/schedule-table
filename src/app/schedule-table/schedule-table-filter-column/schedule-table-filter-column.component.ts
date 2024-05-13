@@ -19,21 +19,24 @@ export class ScheduleTableFilterColumnComponent {
 
   constructor(private tableService: ScheduleTableService) { }
 
-  saveFilter_onClick(headerKey: string) {
+  saveFilter_onClick() {
     const formValue = this.formControl.value?.toLowerCase();
     if (!formValue?.length) return;
-    this.tableService.setDataSource = this.tableService.dataSource
-    .filter((el) => el[headerKey].toLowerCase().includes(formValue));
+    const columnFilters = this.tableService.columnFilters;
+    columnFilters[this.header.key] = formValue;
+    this.tableService.setColumnFilters = columnFilters;
     this.popover.close();
   }
 
-  handleKeyPress(event: KeyboardEvent, headerKey: string) {
-    if (event.code === 'Enter') this.saveFilter_onClick(headerKey);
+  handleKeyPress(event: KeyboardEvent) {
+    if (event.code === 'Enter') this.saveFilter_onClick();
   }
 
   clearFilter_onClick() {
     this.formControl.reset();
     this.popover.close();
-    this.tableService.setDataSource = [];
+    const columnFilters = this.tableService.columnFilters;
+    delete columnFilters[this.header.key];
+    this.tableService.setColumnFilters = columnFilters;
   }
 }
