@@ -1,4 +1,4 @@
 <div class="w-100 d-flex">
-  <schedule-table class="flex-1" [dataSource]="dataSource" [headers]="headers">
+  <schedule-table class="flex-1" [dataSource]="dataSource" [headers]="headers" (onRowEvent)="table_onRowEvent($event)">
   </schedule-table>
 </div>

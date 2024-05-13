@@ -9,6 +9,7 @@ import { HttpParams } from '@angular/common/http';
 import { DEFAULT_END_DATE, DEFAULT_START_DATE } from './shared/constant/date.const';
 import { DatePipe } from '@angular/common';
 import { EmployeeNameCellComponent } from './dynamic-cells/employee-name-cell/employee-name-cell.component';
+import { IRowEvent } from './shared/model/IRowEvent.interface';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,10 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.initHeaders();
     this.initData();
+  }
+
+  table_onRowEvent(event: IRowEvent) {
+    console.log(event);
   }
 
   initData() {

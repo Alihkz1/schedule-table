@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input } from '@angular/core';
+import { IRowEvent } from '../../shared/model/IRowEvent.interface';
 
 @Component({
   selector: 'app-employee-name-cell',
@@ -7,15 +8,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   templateUrl: './employee-name-cell.component.html',
   styleUrl: './employee-name-cell.component.scss'
 })
-export class EmployeeNameCellComponent implements OnInit {
+export class EmployeeNameCellComponent {
   @Input() row: any;
-  @Output() onRowEvent = new EventEmitter();
-
-  ngOnInit(): void {
-    console.log(this.row);
-  }
+  @Input() onRowEvent: EventEmitter<IRowEvent>;
 
   onRemove() {
-    this.onRowEvent.emit(this.row)
+    this.onRowEvent.emit({
+      action: 'remove_user',
+      data: this.row
+    })
   }
 }

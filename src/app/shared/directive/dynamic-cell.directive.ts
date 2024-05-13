@@ -1,4 +1,5 @@
-import { ComponentRef, Directive, Input, OnChanges, OnDestroy, SimpleChanges, ViewContainerRef } from '@angular/core';
+import { ComponentRef, Directive, EventEmitter, Input, OnChanges, OnDestroy, SimpleChanges, ViewContainerRef } from '@angular/core';
+import { IRowEvent } from '../model/IRowEvent.interface';
 @Directive({
   selector: '[dynamicCell]',
   standalone: true
@@ -7,11 +8,12 @@ export class DynamicCellDirective implements OnChanges, OnDestroy {
   @Input() row: any;
   @Input() column: any;
   @Input() component: any;
-  @Input() onRowEvent: any;
+  @Input() onRowEvent: EventEmitter<IRowEvent>;
 
   private componentRef: ComponentRef<any>;
 
-  constructor(private vc: ViewContainerRef) { }
+  constructor(private vc: ViewContainerRef) {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.componentRef === undefined) {
