@@ -1,25 +1,33 @@
 <table class="table">
     <thead>
         <tr>
-            <th *ngFor="let h of headers" [ngStyle]="{ 'min-width' : h.width + 'px'}">
+            <th *ngFor="let header of headers" [ngStyle]="{ 'min-width' : header.width + 'px'}">
                 <div class="w-100 h-100 d-flex align-items-center justify-content-between ps-1">
-                    {{ h.title }}
-                    <span class="sort" *ngIf="h.sortable">
-                        <ng-container *ngIf="!h.asc">
-                            <img class="sort-icon" src="assets/asc-sort.svg" alt="sort"
-                                (click)="h.asc = true; onSortChange()">
-                        </ng-container>
-                        <ng-container *ngIf="h.asc">
-                            <img class="sort-icon" src="assets/desc-sort.svg" alt="sort"
-                                (click)="h.asc = false; onSortChange()">
-                        </ng-container>
-                    </span>
+                    <div>
+
+                        {{ header.title }}
+
+                        <!-- sort column  -->
+                        <span class="sort" *ngIf="header.sortable">
+                            <ng-container *ngIf="!header.asc">
+                                <img class="sort-icon" src="assets/asc-sort.svg" alt="sort"
+                                    (click)="header.asc = true; sortChange_onClick()">
+                            </ng-container>
+                            <ng-container *ngIf="header.asc">
+                                <img class="sort-icon" src="assets/desc-sort.svg" alt="sort"
+                                    (click)="header.asc = false; sortChange_onClick()">
+                            </ng-container>
+                        </span>
+                    </div>
+
+                    <!-- filter column -->
+                    <schedule-table-filter-column [header]="header"> </schedule-table-filter-column>
                 </div>
             </th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let row of dataSource; let i = index" [ngStyle]="{ 'height' : rowHeight + 'px'}">
+        <tr *ngFor="let row of tableService.dataSource; let i = index" [ngStyle]="{ 'height' : rowHeight + 'px'}">
             <td *ngFor="let header of headers" class="cell">
                 <ng-container *ngIf="header.dynamicCellComponent" [column]="header" [row]="row"
                     [onRowEvent]="onRowEvent" [component]="header.dynamicCellComponent" dynamicCell>
@@ -29,7 +37,6 @@
                         {{ row[header.key] }}
                     </div>
                 </ng-container>
-
             </td>
         </tr>
     </tbody>

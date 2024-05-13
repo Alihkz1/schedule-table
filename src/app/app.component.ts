@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
   }
 
   initData() {
-    const data = MOCK_DATA.map((el, i) => {
+    const ds = MOCK_DATA.map((el: any, i: number) => {
       return {
         ...el,
         i: i + 1,
@@ -51,7 +51,10 @@ export class AppComponent implements OnInit {
         })
       }
     });
-    this._dataSource$.next(data);
+    this._dataSource$.next(ds);
+    // this.sharedService.getWorkCalender().subscribe((data) => {
+    //   this._dataSource$.next(data);
+    // });
   }
 
   initHeaders() {

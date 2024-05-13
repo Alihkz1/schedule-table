@@ -14,7 +14,7 @@ export class SharedService {
     return this.http.get('http://192.168.2.200:5013/EDNurses/v1/config?key=employeeGridSchedule', {
       params,
       headers: {
-        Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6IjZlZGNlNzcxLTE4MGUtNDQ2OC04NzhkLTEyOWIzYzkzY2ZmYSIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjoxLCJhY2NvdW50TmFtZSI6IkhIQyBISCBIYXJ0Zm9yZCBIb3NwaXRhbCIsImlwIjoiMTkyLjE2OC4yLjE3MyIsIm5lZWRNZmEiOmZhbHNlLCJhcHBsaWNhdGlvbklkIjozLCJmb3JjZVRvQ2hhbmdlUGFzcyI6ZmFsc2UsInN5c3RlbSI6ImxpdmUiLCJyb2xlR3JvdXBJZCI6MSwiaWF0IjoxNzE1NDk5NjE5LCJleHAiOjE3MTU1ODU4NDF9.JpF_mXshbHj9OYPDhtsb8dPUYK-HY5q-wZchCatc7XedOje2VOBali35--OeeW5Gx22ACjJ7ltYW6lfQWAygGg'
+        Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6ImUwYjI4ZWY5LTc1Y2QtNGFmMy04MGI0LTlhYWFkZTlmZDAwOSIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjoxLCJhY2NvdW50TmFtZSI6IkhIQyBISCBIYXJ0Zm9yZCBIb3NwaXRhbCIsImlwIjoiMTkyLjE2OC4yLjE3MyIsIm5lZWRNZmEiOmZhbHNlLCJhcHBsaWNhdGlvbklkIjoxNSwiZm9yY2VUb0NoYW5nZVBhc3MiOmZhbHNlLCJzeXN0ZW0iOiJsaXZlIiwicm9sZUdyb3VwSWQiOjEsImlhdCI6MTcxNTUzMTIyNSwiZXhwIjoxNzE1NjE3NjIyfQ.KMd-KtoMWXvWKdBZflIk1GV1BxoL5U4Qg0lRn-mY5Ciz93r82msLhqlByaxkbnIemKMaGZSWv2wyWksu-HK6hg'
       }
     })
       .pipe(map(({ data }: any) => JSON.parse(data.value)));
@@ -22,6 +22,31 @@ export class SharedService {
 
   get userKindID(): number {
     return 1;
+  }
+
+
+  getWorkCalender() {
+    return this.http.get('http://192.168.2.200:5013/EDNurses/v1/WorkCalendar/Search?PageSize=10000&PageIndex=0&StartDate=2024-04-28&EndDate=2024-06-01', {
+      headers: {
+        Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6ImUwYjI4ZWY5LTc1Y2QtNGFmMy04MGI0LTlhYWFkZTlmZDAwOSIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjoxLCJhY2NvdW50TmFtZSI6IkhIQyBISCBIYXJ0Zm9yZCBIb3NwaXRhbCIsImlwIjoiMTkyLjE2OC4yLjE3MyIsIm5lZWRNZmEiOmZhbHNlLCJhcHBsaWNhdGlvbklkIjoxNSwiZm9yY2VUb0NoYW5nZVBhc3MiOmZhbHNlLCJzeXN0ZW0iOiJsaXZlIiwicm9sZUdyb3VwSWQiOjEsImlhdCI6MTcxNTUzMTIyNSwiZXhwIjoxNzE1NjE3NjIyfQ.KMd-KtoMWXvWKdBZflIk1GV1BxoL5U4Qg0lRn-mY5Ciz93r82msLhqlByaxkbnIemKMaGZSWv2wyWksu-HK6hg'
+      }
+    })
+      .pipe(
+        map((({ data }: any) => {
+          return data.WorkCalendar.map((el: any, i: number) => {
+            return {
+              ...el,
+              i: i + 1,
+              Schedule: JSON.parse(el.Schedule).map((s: any) => {
+                return {
+                  ...s,
+                  blockList: s.blockList ? JSON.parse(s.blockList) : []
+                }
+              })
+            }
+          });
+        }))
+      );
   }
 }
 
