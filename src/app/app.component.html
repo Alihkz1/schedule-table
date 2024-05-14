@@ -1,20 +1,20 @@
-<div class="w-100 d-flex flex-column align-items-center h-100 px-3">
-  <schedule-table [class.overflow-y-hidden]="mockDataLoading" class="w-100 overflow-auto flex-1"
+<div class="w-100 d-flex flex-column align-items-center h-100 px-3" (mousemove)="resize_onEvent($event)">
+  <schedule-table [class.overflow-y-hidden]="mockDataLoading" class="w-100 overflow-auto" [style.height.px]="topDivInitialHeight"
     [dataSource]="dataSource" [headers]="headers" [loading]="mockDataLoading" (onRowEvent)="table_onRowEvent($event)">
     >
   </schedule-table>
-  <cdk-accordion [class.accordion-expanded]="accordionItem.expanded">
+  <div class="resize"></div>
+  <cdk-accordion [class.accordion-expanded]="accordionItem.expanded" [style.height.px]="bottomDivInitialHeight">
     <cdk-accordion-item #accordionItem="cdkAccordionItem" role="button" [attr.aria-expanded]="expanded">
-      <div (click)="accordionItem.toggle()">
+      <div>
         <span>
-          <ng-container *ngIf="accordionItem.expanded; else notExpanded">
-            <div class="w-100 d-flex justify-content-between" (click)="$event.stopPropagation()">
-              <div class="buttons ms-2">
-                <button class="normal-button" (click)="toggle_onClick(0); $event.stopPropagation()">Shift</button>
-                <button class="normal-button" (click)="toggle_onClick(1); $event.stopPropagation()">Block</button>
-                <button class="normal-button" (click)="toggle_onClick(2); $event.stopPropagation()">Hours</button>
-              </div>
-              <!-- <div class="mt-2">
+          <div class="w-100 d-flex justify-content-between">
+            <div class="buttons ms-2">
+              <button class="normal-button" (click)="toggle_onClick(0);">Shift</button>
+              <button class="normal-button" (click)="toggle_onClick(1);">Block</button>
+              <button class="normal-button" (click)="toggle_onClick(2);">Hours</button>
+            </div>
+            <!-- <div class="mt-2">
                   <mat-form-field>
                     <mat-label>Position</mat-label>
                     <mat-select [formControl]="positionsFormControl" multiple>
@@ -24,20 +24,13 @@
                     </mat-select>
                   </mat-form-field>
               </div> -->
-              <div>
-                <button class="primary-button mx-2" (click)="apply_onClick(); $event.stopPropagation()">Apply</button>
-                <button class="primary-button mx-2" (click)="available_onClick(); $event.stopPropagation()">Available
-                  Position
-                </button>
-              </div>
-              <img class="icon icon-collapse pe-3" src="assets/expand.svg" alt="">
+            <div>
+              <button class="primary-button mx-2" (click)="apply_onClick();">Apply</button>
+              <button class="primary-button mx-2" (click)="available_onClick();">Available
+                Position
+              </button>
             </div>
-          </ng-container>
-          <ng-template #notExpanded>
-            <div class="w-100 d-flex justify-content-end">
-              <img class="icon icon-expand pe-3" src="assets/expand.svg" alt="">
-            </div>
-          </ng-template>
+          </div>
         </span>
       </div>
     </cdk-accordion-item>

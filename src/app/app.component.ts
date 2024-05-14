@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ScheduleTableComponent } from './schedule-table/schedule-table.component';
 import { MOCK_DATA } from './shared/mock-data.json';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import { ShiftCellComponent } from './dynamic-cells/shift-cell/shift-cell.compon
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 export enum SECOND_TABLE_ENUM {
   SHIFT = 0,
@@ -38,10 +38,49 @@ export class AppComponent implements OnInit {
   private _dataSource$ = new BehaviorSubject<any[]>([]);
   public get dataSource() { return this._dataSource$.getValue() };
 
+  public topDivInitialHeight = 900;
+  public bottomDivInitialHeight = 100;
+  private resizing = false;
+  private startResizeHeight: number;
+
   constructor(
     private sharedService: SharedService,
     private datePipe: DatePipe,
   ) { }
+
+  @HostListener('mousedown', ['$event'])
+  onMouseDown(event: any) {
+    if (event.target['classList'].contains('resize')) {
+      this.resizing = true;
+      this.startResizeHeight = event.clientY;
+    }
+  }
+
+  @HostListener('document:mouseup', ['$event'])
+  onMouseUp() {
+    if (this.resizing) {
+      this.resizing = false;
+    }
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    if (this.resizing) {
+      const deltaY = event.clientY - this.startResizeHeight;
+      this.topDivInitialHeight += deltaY;
+      this.bottomDivInitialHeight -= deltaY;
+      this.startResizeHeight = event.clientY;
+    }
+  }
+
+  public resize_onEvent(event: MouseEvent) {
+    if (this.resizing) {
+      const deltaY = event.clientY - this.startResizeHeight;
+      this.topDivInitialHeight += deltaY;
+      this.bottomDivInitialHeight -= deltaY;
+      this.startResizeHeight = event.clientY;
+    }
+  }
 
   ngOnInit(): void {
     this.initHeaders();
