@@ -26,7 +26,7 @@ export class SharedService {
 
 
   getWorkCalender() {
-    return this.http.get('http://192.168.2.200:5013/EDNurses/v1/WorkCalendar/Search?PageSize=10000&PageIndex=0&StartDate=2024-04-28&EndDate=2024-06-01', {
+    return this.http.get('http://192.168.2.63:5013/EDNurses/v1/WorkCalendar/Search?PageSize=10000&PageIndex=0&StartDate=2024-04-28&EndDate=2024-06-01', {
       headers: {
         Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6Ijc1YzAxMzc1LTk5NTktNDU2My1iNDU3LWQ2MGFlM2Y5ZmUzMSIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjoxLCJhY2NvdW50TmFtZSI6IkhIQyBISCBIYXJ0Zm9yZCBIb3NwaXRhbCIsImlwIjoiMTkyLjE2OC4yLjE3MyIsIm5lZWRNZmEiOmZhbHNlLCJhcHBsaWNhdGlvbklkIjozLCJmb3JjZVRvQ2hhbmdlUGFzcyI6ZmFsc2UsInN5c3RlbSI6ImxpdmUiLCJyb2xlR3JvdXBJZCI6MSwiaWF0IjoxNzE1NjY3MTQ2LCJleHAiOjE3MTU3NTM1MDJ9.F2OhEk_WHnZp67hz1-wt6e16VK0HlMXSWk7v40hHyWgdMUNPVp5qcWAlXP1BgCDNynZEOpqGLDgpm0ZQzVLQfA'
       }

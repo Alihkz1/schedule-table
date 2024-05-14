@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ScheduleTableComponent } from './schedule-table/schedule-table.component';
 import { MOCK_DATA } from './shared/mock-data.json';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { IHeader } from './shared/model/IHeader.interface';
 import { SharedService } from './shared/service/shared.service';
 import { DEFAULT_END_DATE, DEFAULT_START_DATE } from './shared/constant/date.const';
@@ -22,6 +22,8 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 export class AppComponent implements OnInit {
   public headers: IHeader[] = [];
   expanded = false;
+  dataLoading: Subscription;
+  mockDataLoading: boolean;
   private _dataSource$ = new BehaviorSubject<any[]>([]);
   public get dataSource() { return this._dataSource$.getValue() };
 
@@ -40,6 +42,7 @@ export class AppComponent implements OnInit {
   }
 
   initData() {
+    this.mockDataLoading = true
     const ds = MOCK_DATA.map((el: any, i: number) => {
       return {
         ...el,
@@ -52,8 +55,11 @@ export class AppComponent implements OnInit {
         })
       }
     });
+    setTimeout(() => {
+      this.mockDataLoading = false
+    }, 2000);
     this._dataSource$.next(ds);
-    // this.sharedService.getWorkCalender().subscribe((data) => {
+    // this.dataLoading = this.sharedService.getWorkCalender().subscribe((data) => {
     //   this._dataSource$.next(data);
     // });
   }
