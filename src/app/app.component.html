@@ -1,6 +1,7 @@
 <div class="w-100 d-flex flex-column align-items-center h-100 px-3">
   <schedule-table [class.overflow-y-hidden]="mockDataLoading" class="w-100 overflow-auto flex-1"
     [dataSource]="dataSource" [headers]="headers" [loading]="mockDataLoading" (onRowEvent)="table_onRowEvent($event)">
+    >
   </schedule-table>
   <cdk-accordion [class.accordion-expanded]="accordionItem.expanded">
     <cdk-accordion-item #accordionItem="cdkAccordionItem" role="button" [attr.aria-expanded]="expanded">
