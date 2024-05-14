@@ -1,4 +1,25 @@
-<div class="w-100 d-flex">
-  <schedule-table class="flex-1" [dataSource]="dataSource" [headers]="headers" (onRowEvent)="table_onRowEvent($event)">
+<div class="w-100 d-flex flex-column align-items-center h-100 px-3">
+  <schedule-table class="main-table flex-1" [dataSource]="dataSource" [headers]="headers"
+    (onRowEvent)="table_onRowEvent($event)">
   </schedule-table>
+  <cdk-accordion [class.accordion-expanded]="accordionItem.expanded">
+    <cdk-accordion-item #accordionItem="cdkAccordionItem" role="button" [attr.aria-expanded]="expanded">
+      <div (click)="accordionItem.toggle()">
+        <span>
+          <ng-container *ngIf="accordionItem.expanded; else notExpanded">
+            <div class="w-100 d-flex justify-content-end">
+              <img class="icon icon-collapse pe-3" src="assets/expand.svg" alt="">
+            </div>
+          </ng-container>
+          <ng-template #notExpanded>
+            <div class="w-100 d-flex justify-content-end">
+              <img class="icon icon-expand pe-3" src="assets/expand.svg" alt="">
+            </div>
+          </ng-template>
+        </span>
+      </div>
+      <div [style.display]="accordionItem.expanded ? '' : 'none'">
+      </div>
+    </cdk-accordion-item>
+  </cdk-accordion>
 </div>

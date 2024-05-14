@@ -1,0 +1,31 @@
+.main-table {
+    overflow: auto;
+    width: 100%;
+}
+
+::ng-deep cdk-accordion {
+    background: #f8fcff;
+    margin: 5px;
+    padding: 15px 5px;
+    min-height: 50px;
+    overflow: auto;
+    width: 100%;
+    border: 1px solid #e3e3e3;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.accordion-expanded {
+    height: 300px !important;
+    padding-right: 18px;
+}
+
+.icon {
+    height: 20px;
+    cursor: pointer;
+
+    &-collapse {
+        transform: rotate(180deg);
+    }
+}

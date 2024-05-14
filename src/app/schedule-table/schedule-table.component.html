@@ -1,5 +1,5 @@
-<table class="table">
-    <thead>
+<table class="table h-100 w-100">
+    <thead class="overflow-hidden">
         <tr>
             <th *ngFor="let header of headers" [ngStyle]="{ 'min-width' : header.width + 'px'}">
                 <div class="w-100 h-100 d-flex align-items-center justify-content-between ps-1">
@@ -9,8 +9,8 @@
 
                         <!-- sort  -->
                         <ng-container *ngIf="header.sortable">
-                        <schedule-table-sort-column [header]="header"> 
-                        </schedule-table-sort-column>
+                            <schedule-table-sort-column [header]="header">
+                            </schedule-table-sort-column>
                         </ng-container>
 
                     </div>
@@ -24,7 +24,7 @@
             </th>
         </tr>
     </thead>
-    <tbody class="h-100 w-100">
+    <tbody class="h-100 w-100 overflow-auto">
         <tr *ngFor="let row of tableService.finalDataSource; let i = index" [ngStyle]="{ 'height' : rowHeight + 'px'}">
             <td *ngFor="let header of headers" class="cell">
                 <ng-container *ngIf="header.dynamicCellComponent" [column]="header" [row]="row"

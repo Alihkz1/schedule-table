@@ -1,27 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { ScheduleTableComponent } from './schedule-table/schedule-table.component';
 import { MOCK_DATA } from './shared/mock-data.json';
 import { BehaviorSubject } from 'rxjs';
 import { IHeader } from './shared/model/IHeader.interface';
 import { SharedService } from './shared/service/shared.service';
-import { HttpParams } from '@angular/common/http';
 import { DEFAULT_END_DATE, DEFAULT_START_DATE } from './shared/constant/date.const';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { EmployeeNameCellComponent } from './dynamic-cells/employee-name-cell/employee-name-cell.component';
 import { IRowEvent } from './shared/model/IRowEvent.interface';
 import { ShiftCellComponent } from './dynamic-cells/shift-cell/shift-cell.component';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ScheduleTableComponent],
+  imports: [ScheduleTableComponent, CdkAccordionModule, CommonModule],
   providers: [DatePipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   public headers: IHeader[] = [];
+  expanded = false;
   private _dataSource$ = new BehaviorSubject<any[]>([]);
   public get dataSource() { return this._dataSource$.getValue() };
 
@@ -59,23 +59,22 @@ export class AppComponent implements OnInit {
   }
 
   initHeaders() {
-    const params = new HttpParams();
+    // const params = new HttpParams();
     // params.append('key', 'employeeGridSchedule');
-    params.append('key', 'employeeGridSolution');
-    this.sharedService.getTableConfig(params)
-      .subscribe((data) => {
-        // if (data) {
-        //   this.headers = data.map((h: any) => {
-        //     return {
-        //       title: h.header,
-        //       key: h.name,
-        //       width: h.width
-        //     }
-        //   });
-        // } else
-        this.initDefaultHeaders();
-      });
-
+    // params.append('key', 'employeeGridSolution');
+    // this.sharedService.getTableConfig(params)
+    //   .subscribe((data) => {
+    // if (data) {
+    //   this.headers = data.map((h: any) => {
+    //     return {
+    //       title: h.header,
+    //       key: h.name,
+    //       width: h.width
+    //     }
+    //   });
+    // } else
+    // });
+    this.initDefaultHeaders();
   }
 
   initDefaultHeaders() {
