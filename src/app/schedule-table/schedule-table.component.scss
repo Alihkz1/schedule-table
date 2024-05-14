@@ -25,6 +25,29 @@ tbody {
     width: 274px;
 }
 
+.empty-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    position: relative;
+}
+
+.empty-row {
+    display: flex;
+    flex-direction: column;
+    height: 40px;
+    position: fixed;
+    left: 45%;
+    &-icon {
+        height: 50px;
+        padding-bottom: 0;
+    }
+    &-text {
+        color: #C3C3C3;
+    }
+}
+
 /* @todo: refactor loading styles */
 .loading-container {
     display: flex;
