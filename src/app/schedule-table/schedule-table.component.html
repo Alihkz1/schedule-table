@@ -30,20 +30,30 @@
         </div>
     </ng-container>
     <ng-template #loaded>
-        <tbody class="h-100 w-100 overflow-auto">
-            <tr *ngFor="let row of tableService.finalDataSource; let i = index"
-                [ngStyle]="{ 'height' : rowHeight + 'px'}">
-                <td *ngFor="let header of headers" class="cell">
-                    <ng-container *ngIf="header.dynamicCellComponent" [column]="header" [row]="row"
-                        [onRowEvent]="onRowEvent" [component]="header.dynamicCellComponent" dynamicCell>
-                    </ng-container>
-                    <ng-container *ngIf="!header.dynamicCellComponent">
-                        <div class="d-flex justify-content-start align-items-center">
-                            {{ row[header.key] }}
-                        </div>
-                    </ng-container>
-                </td>
-            </tr>
-        </tbody>
+        <ng-container *ngIf="tableService.finalDataSource.length === 0; else dataHasLength">
+            <div class="empty-container">
+                <div class="empty-row">
+                    <img src="assets/empty.svg" alt="" class="empty-row-icon">
+                    <p class="empty-row-text">No Data!</p>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #dataHasLength>
+            <tbody class="h-100 w-100 overflow-auto">
+                <tr *ngFor="let row of tableService.finalDataSource; let i = index"
+                    [ngStyle]="{ 'height' : rowHeight + 'px'}">
+                    <td *ngFor="let header of headers" class="cell">
+                        <ng-container *ngIf="header.dynamicCellComponent" [column]="header" [row]="row"
+                            [onRowEvent]="onRowEvent" [component]="header.dynamicCellComponent" dynamicCell>
+                        </ng-container>
+                        <ng-container *ngIf="!header.dynamicCellComponent">
+                            <div class="d-flex justify-content-start align-items-center">
+                                {{ row[header.key] }}
+                            </div>
+                        </ng-container>
+                    </td>
+                </tr>
+            </tbody>
+        </ng-template>
     </ng-template>
 </table>

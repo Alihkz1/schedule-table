@@ -1,19 +1,11 @@
-.main-table {
-    overflow: auto;
-    width: 100%;
-}
-
 ::ng-deep cdk-accordion {
     background: #f8fcff;
     margin: 5px;
     padding: 15px 5px;
-    min-height: 50px;
+    min-height: 75px;
     overflow: auto;
     width: 100%;
-    border: 1px solid #e3e3e3;
-    display: flex;
-    justify-content: end;
-    align-items: center;
+    border: 1px solid #cacaca;
 }
 
 .accordion-expanded {
@@ -28,4 +20,20 @@
     &-collapse {
         transform: rotate(180deg);
     }
+}
+
+.buttons {
+    border: 1px solid rgb(214, 214, 214);
+    border-radius: 20px;
+    padding: 5px;
+    background-color: white;
+
+    >:not(:last-child) {
+        border-radius: 0;
+        border-right: 1px solid rgb(214, 214, 214);
+    }
+}
+
+::ng-deep .mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
+    padding-top: 10px;
 }

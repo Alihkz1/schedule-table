@@ -10,20 +10,31 @@ import { EmployeeNameCellComponent } from './dynamic-cells/employee-name-cell/em
 import { IRowEvent } from './shared/model/IRowEvent.interface';
 import { ShiftCellComponent } from './dynamic-cells/shift-cell/shift-cell.component';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
+
+export enum SECOND_TABLE_ENUM {
+  SHIFT = 0,
+  BLOCK = 1,
+  HORUS = 2,
+}
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ScheduleTableComponent, CdkAccordionModule, CommonModule],
+  imports: [ScheduleTableComponent, CdkAccordionModule, MatSelectModule, MatFormFieldModule, ReactiveFormsModule, CommonModule],
   providers: [DatePipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   public headers: IHeader[] = [];
-  expanded = false;
+  public positions: any[] = [];
+  expanded = true;
   dataLoading: Subscription;
   mockDataLoading: boolean;
+  positionsFormControl = new FormControl();
   private _dataSource$ = new BehaviorSubject<any[]>([]);
   public get dataSource() { return this._dataSource$.getValue() };
 
@@ -35,14 +46,30 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.initHeaders();
     this.initData();
+    this.getPositions();
+  }
+
+  getPositions() {
+    this.sharedService.getPositions().subscribe((list: any[]) => {
+      console.log(list);
+
+      this.positions = list
+    })
   }
 
   table_onRowEvent(event: IRowEvent) {
     console.log(event);
   }
 
+  toggle_onClick(index: SECOND_TABLE_ENUM) {
+    console.log(index);
+  }
+
+  apply_onClick() { }
+
+  available_onClick() { }
+
   initData() {
-    this.mockDataLoading = true
     const ds = MOCK_DATA.map((el: any, i: number) => {
       return {
         ...el,
@@ -55,9 +82,6 @@ export class AppComponent implements OnInit {
         })
       }
     });
-    setTimeout(() => {
-      this.mockDataLoading = false
-    }, 2000);
     this._dataSource$.next(ds);
     // this.dataLoading = this.sharedService.getWorkCalender().subscribe((data) => {
     //   this._dataSource$.next(data);

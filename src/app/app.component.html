@@ -1,14 +1,34 @@
 <div class="w-100 d-flex flex-column align-items-center h-100 px-3">
-  <schedule-table [class.overflow-y-hidden]="mockDataLoading" class="main-table flex-1"
-    [dataSource]="dataSource" [headers]="headers" [loading]="mockDataLoading"
-    (onRowEvent)="table_onRowEvent($event)">
+  <schedule-table [class.overflow-y-hidden]="mockDataLoading" class="w-100 overflow-auto flex-1"
+    [dataSource]="dataSource" [headers]="headers" [loading]="mockDataLoading" (onRowEvent)="table_onRowEvent($event)">
   </schedule-table>
   <cdk-accordion [class.accordion-expanded]="accordionItem.expanded">
     <cdk-accordion-item #accordionItem="cdkAccordionItem" role="button" [attr.aria-expanded]="expanded">
       <div (click)="accordionItem.toggle()">
         <span>
           <ng-container *ngIf="accordionItem.expanded; else notExpanded">
-            <div class="w-100 d-flex justify-content-end">
+            <div class="w-100 d-flex justify-content-between" (click)="$event.stopPropagation()">
+              <div class="buttons ms-2">
+                <button class="normal-button" (click)="toggle_onClick(0); $event.stopPropagation()">Shift</button>
+                <button class="normal-button" (click)="toggle_onClick(1); $event.stopPropagation()">Block</button>
+                <button class="normal-button" (click)="toggle_onClick(2); $event.stopPropagation()">Hours</button>
+              </div>
+              <!-- <div class="mt-2">
+                  <mat-form-field>
+                    <mat-label>Position</mat-label>
+                    <mat-select [formControl]="positionsFormControl" multiple>
+                      @for (position of positions; track position) {
+                        <mat-option [value]="position.PositionID">{{ position.PositionName }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+              </div> -->
+              <div>
+                <button class="primary-button mx-2" (click)="apply_onClick(); $event.stopPropagation()">Apply</button>
+                <button class="primary-button mx-2" (click)="available_onClick(); $event.stopPropagation()">Available
+                  Position
+                </button>
+              </div>
               <img class="icon icon-collapse pe-3" src="assets/expand.svg" alt="">
             </div>
           </ng-container>
@@ -18,8 +38,6 @@
             </div>
           </ng-template>
         </span>
-      </div>
-      <div [style.display]="accordionItem.expanded ? '' : 'none'">
       </div>
     </cdk-accordion-item>
   </cdk-accordion>
