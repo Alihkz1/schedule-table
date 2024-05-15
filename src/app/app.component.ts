@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ScheduleTableComponent } from './schedule-table/schedule-table.component';
 import { MOCK_DATA } from './shared/mock-data.json';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -13,8 +13,9 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
-export enum SECOND_TABLE_ENUM {
+export enum PROGRAMMED_TABLE_ENUM {
   SHIFT = 0,
   BLOCK = 1,
   HORUS = 2,
@@ -23,29 +24,52 @@ export enum SECOND_TABLE_ENUM {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ScheduleTableComponent, CdkAccordionModule, MatSelectModule, MatFormFieldModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    ScheduleTableComponent,
+    CdkAccordionModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    CommonModule,
+    MatSidenavModule
+  ],
   providers: [DatePipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  public headers: IHeader[] = [];
+  @ViewChild('drawer', { static: false }) drawer: any;
+
   public positions: any[] = [];
+  public blocks: any[] = [];
+
+  public headers: IHeader[] = [];
+  private _programmedHeaders$ = new BehaviorSubject<any[]>([]);
+  public get programmedHeaders(): IHeader[] { return this._programmedHeaders$.getValue() }
+
   expanded = true;
   dataLoading: Subscription;
   mockDataLoading: boolean;
+  programmedLoading: boolean;
+
+  selectedToggle = 1;
   positionsFormControl = new FormControl();
+
+  private _toggle$ = new BehaviorSubject<PROGRAMMED_TABLE_ENUM>(PROGRAMMED_TABLE_ENUM.BLOCK);
+
   private _dataSource$ = new BehaviorSubject<any[]>([]);
   public get dataSource() { return this._dataSource$.getValue() };
+  private _programmedDataSource$ = new BehaviorSubject<any[]>([]);
+  public get programmedDataSource() { return this._programmedDataSource$.getValue() };
 
-  public topDivInitialHeight = 900;
-  public bottomDivInitialHeight = 100;
   private resizing = false;
+  public topDivInitialHeight = 600;
+  public bottomDivInitialHeight = 400;
   private startResizeHeight: number;
 
   constructor(
-    private sharedService: SharedService,
     private datePipe: DatePipe,
+    private sharedService: SharedService,
   ) { }
 
   @HostListener('mousedown', ['$event'])
@@ -86,22 +110,77 @@ export class AppComponent implements OnInit {
     this.initHeaders();
     this.initData();
     this.getPositions();
+    this.toggleChange();
+  }
+
+  toggleChange() {
+    this._toggle$.subscribe((index: PROGRAMMED_TABLE_ENUM) => {
+      let headers: IHeader[] = [];
+      switch (index) {
+        case PROGRAMMED_TABLE_ENUM.SHIFT:
+          this.getShifts();
+          headers = [
+            {
+              key: 'Date',
+              title: 'Date'
+            }
+          ]
+          break;
+        case PROGRAMMED_TABLE_ENUM.BLOCK:
+          this.getBlocks();
+          headers = [
+            {
+              key: 'BlockName',
+              title: 'Block Name',
+            },
+          ]
+          break;
+        case PROGRAMMED_TABLE_ENUM.HORUS:
+          this.getIntervals();
+          headers = [
+            {
+              key: 'intervalName',
+              title: 'Interval Name'
+            }
+          ]
+          break;
+      }
+      this._programmedHeaders$.next(headers)
+    })
   }
 
   getPositions() {
     this.sharedService.getPositions().subscribe((list: any[]) => {
-      console.log(list);
-
       this.positions = list
     })
   }
+
+  getBlocks() {
+    this.sharedService.getBlocks().subscribe((list: any[]) => {
+      this._programmedDataSource$.next(list);
+    })
+  }
+
+  getShifts() {
+    this.sharedService.getShifts().subscribe((list: any[]) => {
+      this._programmedDataSource$.next(list);
+    })
+  }
+
+  getIntervals() {
+    this.sharedService.getIntervals().subscribe((list: any[]) => {
+      this._programmedDataSource$.next(list);
+    })
+  }
+
 
   table_onRowEvent(event: IRowEvent) {
     console.log(event);
   }
 
-  toggle_onClick(index: SECOND_TABLE_ENUM) {
-    console.log(index);
+  toggle_onClick(index: PROGRAMMED_TABLE_ENUM) {
+    this.selectedToggle = index;
+    this._toggle$.next(index);
   }
 
   apply_onClick() { }
@@ -122,27 +201,14 @@ export class AppComponent implements OnInit {
       }
     });
     this._dataSource$.next(ds);
-    // this.dataLoading = this.sharedService.getWorkCalender().subscribe((data) => {
-    //   this._dataSource$.next(data);
-    // });
+    this.mockDataLoading = true;
+    this.dataLoading = this.sharedService.getWorkCalender().subscribe((data) => {
+      this.mockDataLoading = false;
+      this._dataSource$.next(data);
+    });
   }
 
   initHeaders() {
-    // const params = new HttpParams();
-    // params.append('key', 'employeeGridSchedule');
-    // params.append('key', 'employeeGridSolution');
-    // this.sharedService.getTableConfig(params)
-    //   .subscribe((data) => {
-    // if (data) {
-    //   this.headers = data.map((h: any) => {
-    //     return {
-    //       title: h.header,
-    //       key: h.name,
-    //       width: h.width
-    //     }
-    //   });
-    // } else
-    // });
     this.initDefaultHeaders();
   }
 
@@ -201,5 +267,4 @@ export class AppComponent implements OnInit {
       });
     })
   }
-
 }

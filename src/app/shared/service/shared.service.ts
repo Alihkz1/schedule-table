@@ -28,7 +28,7 @@ export class SharedService {
   getWorkCalender() {
     return this.http.get('http://192.168.2.63:5013/EDNurses/v1/WorkCalendar/Search?PageSize=10000&PageIndex=0&StartDate=2024-04-28&EndDate=2024-06-01', {
       headers: {
-        Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6Ijc1YzAxMzc1LTk5NTktNDU2My1iNDU3LWQ2MGFlM2Y5ZmUzMSIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjoxLCJhY2NvdW50TmFtZSI6IkhIQyBISCBIYXJ0Zm9yZCBIb3NwaXRhbCIsImlwIjoiMTkyLjE2OC4yLjE3MyIsIm5lZWRNZmEiOmZhbHNlLCJhcHBsaWNhdGlvbklkIjozLCJmb3JjZVRvQ2hhbmdlUGFzcyI6ZmFsc2UsInN5c3RlbSI6ImxpdmUiLCJyb2xlR3JvdXBJZCI6MSwiaWF0IjoxNzE1NjY3MTQ2LCJleHAiOjE3MTU3NTM1MDJ9.F2OhEk_WHnZp67hz1-wt6e16VK0HlMXSWk7v40hHyWgdMUNPVp5qcWAlXP1BgCDNynZEOpqGLDgpm0ZQzVLQfA'
+        Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6IjM4Y2RhNGY3LTE0NDUtNDQ3Ny1hYmZhLTY5NTg4NzkwNzQ3ZiIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjo2LCJhY2NvdW50TmFtZSI6IkhIQyBTViBTdC4gVmluY2VudCdzIE1lZGljYWwgQ2VudGVyIiwiaXAiOiIxOTIuMTY4LjIuMTczIiwibmVlZE1mYSI6ZmFsc2UsImFwcGxpY2F0aW9uSWQiOjEsImZvcmNlVG9DaGFuZ2VQYXNzIjpmYWxzZSwibWV0YURhdGEiOnt9LCJzeXN0ZW0iOiJsaXZlIiwicm9sZUdyb3VwSWQiOjM1LCJpYXQiOjE3MTU3NzcyNTIsImV4cCI6MTcxNTg2MzY1Mn0.fFGTb4f0hEaRftHFy5SX6FoiXgYdaMpaLcDDoYBvr4feGWY2okUNpckS2JJZfl7nuUSgz6KcH5E2BR6T03RpJw'
       }
     })
       .pipe(
@@ -49,15 +49,54 @@ export class SharedService {
       );
   }
 
-  getPositions(){
+  getPositions() {
     return this.http.get('http://192.168.2.63:5013/EDNurses/v1/Position/List', {
       headers: {
-        Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6Ijc1YzAxMzc1LTk5NTktNDU2My1iNDU3LWQ2MGFlM2Y5ZmUzMSIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjoxLCJhY2NvdW50TmFtZSI6IkhIQyBISCBIYXJ0Zm9yZCBIb3NwaXRhbCIsImlwIjoiMTkyLjE2OC4yLjE3MyIsIm5lZWRNZmEiOmZhbHNlLCJhcHBsaWNhdGlvbklkIjozLCJmb3JjZVRvQ2hhbmdlUGFzcyI6ZmFsc2UsInN5c3RlbSI6ImxpdmUiLCJyb2xlR3JvdXBJZCI6MSwiaWF0IjoxNzE1NjY3MTQ2LCJleHAiOjE3MTU3NTM1MDJ9.F2OhEk_WHnZp67hz1-wt6e16VK0HlMXSWk7v40hHyWgdMUNPVp5qcWAlXP1BgCDNynZEOpqGLDgpm0ZQzVLQfA'
+        Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6IjM4Y2RhNGY3LTE0NDUtNDQ3Ny1hYmZhLTY5NTg4NzkwNzQ3ZiIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjo2LCJhY2NvdW50TmFtZSI6IkhIQyBTViBTdC4gVmluY2VudCdzIE1lZGljYWwgQ2VudGVyIiwiaXAiOiIxOTIuMTY4LjIuMTczIiwibmVlZE1mYSI6ZmFsc2UsImFwcGxpY2F0aW9uSWQiOjEsImZvcmNlVG9DaGFuZ2VQYXNzIjpmYWxzZSwibWV0YURhdGEiOnt9LCJzeXN0ZW0iOiJsaXZlIiwicm9sZUdyb3VwSWQiOjM1LCJpYXQiOjE3MTU3NzcyNTIsImV4cCI6MTcxNTg2MzY1Mn0.fFGTb4f0hEaRftHFy5SX6FoiXgYdaMpaLcDDoYBvr4feGWY2okUNpckS2JJZfl7nuUSgz6KcH5E2BR6T03RpJw'
       }
     })
       .pipe(
         map((({ data }: any) => {
           return data.PositionList;
+        }))
+      );
+  }
+
+  getBlocks() {
+    return this.http.get('http://192.168.2.63:5013/EDNurses/v1/Block/List', {
+      headers: {
+        Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6IjM4Y2RhNGY3LTE0NDUtNDQ3Ny1hYmZhLTY5NTg4NzkwNzQ3ZiIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjo2LCJhY2NvdW50TmFtZSI6IkhIQyBTViBTdC4gVmluY2VudCdzIE1lZGljYWwgQ2VudGVyIiwiaXAiOiIxOTIuMTY4LjIuMTczIiwibmVlZE1mYSI6ZmFsc2UsImFwcGxpY2F0aW9uSWQiOjEsImZvcmNlVG9DaGFuZ2VQYXNzIjpmYWxzZSwibWV0YURhdGEiOnt9LCJzeXN0ZW0iOiJsaXZlIiwicm9sZUdyb3VwSWQiOjM1LCJpYXQiOjE3MTU3NzcyNTIsImV4cCI6MTcxNTg2MzY1Mn0.fFGTb4f0hEaRftHFy5SX6FoiXgYdaMpaLcDDoYBvr4feGWY2okUNpckS2JJZfl7nuUSgz6KcH5E2BR6T03RpJw'
+      }
+    })
+      .pipe(
+        map((({ data }: any) => {
+          return data.BlockList;
+        }))
+      );
+  }
+
+  getShifts() {
+    return this.http.get('http://192.168.2.63:5013/EDNurses/v1/Shift/Schedule?SolutionID=341&startDate=2024-04-28&endDate=2024-06-01', {
+      headers: {
+        Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6IjM4Y2RhNGY3LTE0NDUtNDQ3Ny1hYmZhLTY5NTg4NzkwNzQ3ZiIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjo2LCJhY2NvdW50TmFtZSI6IkhIQyBTViBTdC4gVmluY2VudCdzIE1lZGljYWwgQ2VudGVyIiwiaXAiOiIxOTIuMTY4LjIuMTczIiwibmVlZE1mYSI6ZmFsc2UsImFwcGxpY2F0aW9uSWQiOjEsImZvcmNlVG9DaGFuZ2VQYXNzIjpmYWxzZSwibWV0YURhdGEiOnt9LCJzeXN0ZW0iOiJsaXZlIiwicm9sZUdyb3VwSWQiOjM1LCJpYXQiOjE3MTU3NzcyNTIsImV4cCI6MTcxNTg2MzY1Mn0.fFGTb4f0hEaRftHFy5SX6FoiXgYdaMpaLcDDoYBvr4feGWY2okUNpckS2JJZfl7nuUSgz6KcH5E2BR6T03RpJw'
+      }
+    })
+      .pipe(
+        map((({ data }: any) => {
+          return data.PlannedShift;
+        }))
+      );
+  }
+
+  getIntervals() {
+    return this.http.get('http://192.168.2.63:5013/EDNurses/v1/schedule/scheduled-intervals?SolutionID=341&startDate=2024-05-12&endDate=2024-05-18', {
+      headers: {
+        Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6IjM4Y2RhNGY3LTE0NDUtNDQ3Ny1hYmZhLTY5NTg4NzkwNzQ3ZiIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjo2LCJhY2NvdW50TmFtZSI6IkhIQyBTViBTdC4gVmluY2VudCdzIE1lZGljYWwgQ2VudGVyIiwiaXAiOiIxOTIuMTY4LjIuMTczIiwibmVlZE1mYSI6ZmFsc2UsImFwcGxpY2F0aW9uSWQiOjEsImZvcmNlVG9DaGFuZ2VQYXNzIjpmYWxzZSwibWV0YURhdGEiOnt9LCJzeXN0ZW0iOiJsaXZlIiwicm9sZUdyb3VwSWQiOjM1LCJpYXQiOjE3MTU3NzcyNTIsImV4cCI6MTcxNTg2MzY1Mn0.fFGTb4f0hEaRftHFy5SX6FoiXgYdaMpaLcDDoYBvr4feGWY2okUNpckS2JJZfl7nuUSgz6KcH5E2BR6T03RpJw'
+      }
+    })
+      .pipe(
+        map((({ data }: any) => {
+          return data.StaffCountIntervals;
         }))
       );
   }

@@ -24,13 +24,14 @@
 
 .buttons {
     border: 1px solid rgb(214, 214, 214);
-    border-radius: 20px;
-    padding: 5px;
     background-color: white;
 
     >:not(:last-child) {
-        border-radius: 0;
         border-right: 1px solid rgb(214, 214, 214);
+    }
+
+    button {
+        border-radius: 0;
     }
 }
 
@@ -43,4 +44,14 @@
     height: 5px;
     width: 100%;
     border: 1px solid rgb(188, 188, 188);
+}
+
+.expand-container {
+    border: 1px solid rgb(200, 200, 200);
+    margin-top: 10px;
+}
+
+.drawer {
+    width: 400px;
+    background: #f3f3f3;
 }

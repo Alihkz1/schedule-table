@@ -20,6 +20,7 @@ import { ShiftCellComponent } from '../dynamic-cells/shift-cell/shift-cell.compo
     ScheduleTableSortColumnComponent,
     ShiftCellComponent
   ],
+  providers: [ScheduleTableService],
   templateUrl: './schedule-table.component.html',
   styleUrl: './schedule-table.component.scss'
 })

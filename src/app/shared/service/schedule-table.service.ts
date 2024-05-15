@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ScheduleTableService {
 
   private _columnFilters$ = new BehaviorSubject<any>({}); /* for column filter parameters */
@@ -23,8 +21,6 @@ export class ScheduleTableService {
 
   public get finalDataSource(): any[] {
     if (this.dataSource.length) return this.dataSource;
-    else return this._realDataSource$.getValue()
+    else return this.realDataSource;
   }
-
-
 }
