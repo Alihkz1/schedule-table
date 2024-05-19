@@ -16,13 +16,11 @@ export class ShiftCellComponent implements OnInit {
   @Input() column: any;
   @Input() onRowEvent: EventEmitter<IRowEvent>;
   solutionDays = SOLUTION_DAYS;
-  columnNo: number;
+
 
   constructor(private sharedService: SharedService) { }
 
-  ngOnInit(): void {
-    this.columnNo = this.column.key.split('day')[1];
-  }
+  ngOnInit(): void { }
 
   addShift() {
     this.onRowEvent.emit({

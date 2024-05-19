@@ -6,4 +6,5 @@ export interface IHeader {
     filterable?: boolean,
     asc?: boolean,
     dynamicCellComponent?: any,
+    className?: string,
 }

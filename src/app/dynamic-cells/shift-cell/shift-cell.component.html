@@ -1,8 +1,3 @@
-<ng-container *ngIf="row.Schedule[columnNo]?.DisplayShift; else addIcon">
-    {{ row.Schedule[columnNo]?.DisplayShift }}
+<ng-container *ngIf="column.key.startsWith('day')">
+
 </ng-container>
-<ng-template #addIcon>
-    <div class="h-100 w-100 d-flex justify-content-center align-items-center">
-        <img class="add-svg" src="assets/add.svg" alt="" (click)="addShift()">
-    </div>
-</ng-template>

@@ -1,7 +1,7 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ScheduleTableComponent } from './schedule-table/schedule-table.component';
 import { MOCK_DATA } from './shared/mock-data.json';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, interval } from 'rxjs';
 import { IHeader } from './shared/model/IHeader.interface';
 import { SharedService } from './shared/service/shared.service';
 import { DEFAULT_END_DATE, DEFAULT_START_DATE } from './shared/constant/date.const';
@@ -67,13 +67,26 @@ export class AppComponent implements OnInit {
   public bottomDivInitialHeight = 400;
   private startResizeHeight: number;
 
+  private resizingRed = false;
+  private redSplitterStartWidth: number;
+
   constructor(
     private datePipe: DatePipe,
+    private cdr: ChangeDetectorRef,
     private sharedService: SharedService,
-  ) { }
+  ) {
+    interval(2000).subscribe(() => {
+      this.syncTable();
+    });
+  }
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(event: any) {
+    if (event.target['classList'].contains('red-splitter')) {
+      this.resizingRed = true;
+      this.redSplitterStartWidth = event.clientX;
+    }
+
     if (event.target['classList'].contains('resize')) {
       this.resizing = true;
       this.startResizeHeight = event.clientY;
@@ -85,15 +98,27 @@ export class AppComponent implements OnInit {
     if (this.resizing) {
       this.resizing = false;
     }
+    if (this.resizingRed) {
+      this.resizingRed = false;
+    }
   }
 
   @HostListener('document:mousemove', ['$event'])
-  onMouseMove(event: MouseEvent) {
+  onMouseMove(event: any) {
     if (this.resizing) {
       const deltaY = event.clientY - this.startResizeHeight;
       this.topDivInitialHeight += deltaY;
       this.bottomDivInitialHeight -= deltaY;
       this.startResizeHeight = event.clientY;
+    }
+    if (this.resizingRed) {
+      const deltaX = this.redSplitterStartWidth - event.clientX;
+      const targetNode: any = document.getElementsByClassName(
+        'red-splitter'
+      )[0];
+      targetNode.style['min-width'] = `${targetNode.clientWidth - deltaX}px`;
+      targetNode.style['max-width'] = `${targetNode.clientWidth - deltaX}px`;
+      this.cdr.detectChanges();
     }
   }
 
@@ -188,19 +213,7 @@ export class AppComponent implements OnInit {
   available_onClick() { }
 
   initData() {
-    const ds = MOCK_DATA.map((el: any, i: number) => {
-      return {
-        ...el,
-        i: i + 1,
-        Schedule: JSON.parse(el.Schedule).map((s: any) => {
-          return {
-            ...s,
-            blockList: s.blockList ? JSON.parse(s.blockList) : []
-          }
-        })
-      }
-    });
-    this._dataSource$.next(ds);
+    // this.initMockData();
     this.mockDataLoading = true;
     this.dataLoading = this.sharedService.getWorkCalender().subscribe((data) => {
       this.mockDataLoading = false;
@@ -208,18 +221,81 @@ export class AppComponent implements OnInit {
     });
   }
 
+  initMockData() {
+    this._dataSource$.next(
+      MOCK_DATA.map((el: any, i: number) => {
+        return {
+          ...el,
+          i: i + 1,
+          Schedule: JSON.parse(el.Schedule).map((s: any) => {
+            return {
+              ...s,
+              blockList: s.blockList ? JSON.parse(s.blockList) : []
+            }
+          })
+        }
+      }),
+    );
+  }
+
   initHeaders() {
     this.initDefaultHeaders();
   }
 
+  syncTable() {
+    const targetNode = document.getElementsByClassName(
+      'red-splitter'
+    )[0]
+
+    // this.redSplitterWidth = targetNode.clientWidth;
+
+    if (targetNode) {
+
+      let bottomCells: any = document.getElementsByClassName(
+        'shift-splitter'
+      );
+
+      let bottomBlockCell: any = document.getElementsByClassName(
+        'block-splitter'
+      );
+
+      let bottomIntervalCell: any = document.getElementsByClassName(
+        'interval-splitter'
+      );
+
+      // let columnWidth = Number.parseInt(targetNode.offsetWidth);
+
+
+
+      // for (let i = 0; i < bottomCells.length; i++) {
+      //   bottomCells[i].style['max-width'] = targetNode.offsetLeft + w1 + 'px';
+      //   bottomCells[i].style['min-width'] = targetNode.offsetLeft + w1 + 'px';
+      // }
+
+      // for (let i = 0; i < bottomBlockCell.length; i++) {
+      //   bottomBlockCell[i].style['max-width'] =
+      //     targetNode.offsetLeft + w1 + 'px';
+      //   bottomBlockCell[i].style['min-width'] =
+      //     targetNode.offsetLeft + w1 + 'px';
+      // }
+
+      // for (let i = 0; i < bottomIntervalCell.length; i++) {
+      //   bottomIntervalCell[i].style['max-width'] =
+      //     targetNode.offsetLeft + w1 + 'px';
+      //   bottomIntervalCell[i].style['min-width'] =
+      //     targetNode.offsetLeft + w1 + 'px';
+      // }
+    }
+  }
+
   initDefaultHeaders() {
     this.headers = [
-      {
-        title: '#',
-        key: 'i',
-        sortable: true,
-        width: 20
-      },
+      // {
+      //   title: '#',
+      //   key: 'i',
+      //   sortable: true,
+      //   width: 20
+      // },
       {
         title: 'RN Name',
         key: 'FullName',
@@ -240,7 +316,8 @@ export class AppComponent implements OnInit {
         key: 'RnTierTitle',
         filterable: true,
         sortable: true,
-        width: 250
+        width: 250,
+        className: 'red-splitter'
       },
     ];
     const dates = [];

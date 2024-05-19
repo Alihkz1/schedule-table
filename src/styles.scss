@@ -41,3 +41,8 @@ body {
     height: 35px;
     border-radius: 5px;
 }
+
+.red-splitter {
+    border-right: solid 6px #ff4081 !important;
+    cursor: e-resize;
+}
