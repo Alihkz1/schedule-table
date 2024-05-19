@@ -118,7 +118,7 @@ export class AppComponent implements OnInit {
       let headers: IHeader[] = [];
       switch (index) {
         case PROGRAMMED_TABLE_ENUM.SHIFT:
-          this.getShifts();
+          this.getShifts({ PositionList: JSON.stringify(this.positionsFormControl.value) });
           headers = [
             {
               key: 'Date',
@@ -127,7 +127,7 @@ export class AppComponent implements OnInit {
           ]
           break;
         case PROGRAMMED_TABLE_ENUM.BLOCK:
-          this.getBlocks();
+          this.getBlocks({ PositionList: JSON.stringify(this.positionsFormControl.value) });
           headers = [
             {
               key: 'BlockName',
@@ -136,7 +136,7 @@ export class AppComponent implements OnInit {
           ]
           break;
         case PROGRAMMED_TABLE_ENUM.HORUS:
-          this.getIntervals();
+          this.getIntervals({ PositionList: JSON.stringify(this.positionsFormControl.value) });
           headers = [
             {
               key: 'intervalName',
@@ -155,27 +155,27 @@ export class AppComponent implements OnInit {
     })
   }
 
-  getBlocks() {
-    this.sharedService.getBlocks().subscribe((list: any[]) => {
+  getBlocks(model: any) {
+    this.sharedService.getBlocks(model).subscribe((list: any[]) => {
       this._programmedDataSource$.next(list);
     })
   }
 
-  getShifts() {
-    this.sharedService.getShifts().subscribe((list: any[]) => {
+  getShifts(model: any) {
+    this.sharedService.getShifts(model).subscribe((list: any[]) => {
       this._programmedDataSource$.next(list);
     })
   }
 
-  getIntervals() {
-    this.sharedService.getIntervals().subscribe((list: any[]) => {
+  getIntervals(model: any) {
+    this.sharedService.getIntervals(model).subscribe((list: any[]) => {
       this._programmedDataSource$.next(list);
     })
   }
-
 
   table_onRowEvent(event: IRowEvent) {
     console.log(event);
+    this.drawer.toggle();
   }
 
   toggle_onClick(index: PROGRAMMED_TABLE_ENUM) {

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { IRowEvent } from '../../shared/model/IRowEvent.interface';
 import { SOLUTION_DAYS } from '../../shared/constant/date.const';
 import { CommonModule } from '@angular/common';
+import { SharedService } from '../../shared/service/shared.service';
 
 @Component({
   selector: 'app-shift-cell',
@@ -17,7 +18,16 @@ export class ShiftCellComponent implements OnInit {
   solutionDays = SOLUTION_DAYS;
   columnNo: number;
 
+  constructor(private sharedService: SharedService) { }
+
   ngOnInit(): void {
     this.columnNo = this.column.key.split('day')[1];
+  }
+
+  addShift() {
+    this.onRowEvent.emit({
+      action: 'add_shift',
+      data: this.row
+    })
   }
 }

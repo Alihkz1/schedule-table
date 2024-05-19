@@ -6,7 +6,7 @@
       </div>
     </mat-drawer>
     <mat-drawer-content>
-      <schedule-table [class.overflow-y-hidden]="mockDataLoading" class="w-100 overflow-auto" [dataSource]="dataSource"
+      <schedule-table [class.overflow-y-hidden]="mockDataLoading" class="w-100 overflow-hidden" [dataSource]="dataSource"
         [headers]="headers" [loading]="mockDataLoading" (onRowEvent)="table_onRowEvent($event)">
       </schedule-table>
     </mat-drawer-content>
@@ -25,16 +25,16 @@
             <button class="normal-button" [class.primary-button]="selectedToggle === 2"
               (click)="toggle_onClick(2);">Hours</button>
           </div>
-          <!-- <div class="mt-2">
-                    <mat-form-field>
-                      <mat-label>Position</mat-label>
-                      <mat-select [formControl]="positionsFormControl" multiple>
-                        @for (position of positions; track position) {
-                          <mat-option [value]="position.PositionID">{{ position.PositionName }}</mat-option>
-                        }
-                      </mat-select>
-                    </mat-form-field>
-                </div> -->
+          <div class="mt-2">
+            <mat-form-field>
+              <mat-label>Position</mat-label>
+              <mat-select [formControl]="positionsFormControl" multiple>
+                @for (position of positions; track position) {
+                <mat-option [value]="position.PositionID">{{ position.PositionName }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
           <div>
             <button class="primary-button mx-2" (click)="apply_onClick();">Apply</button>
             <button class="primary-button mx-2" (click)="available_onClick();">Available

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IHeader } from '../shared/model/IHeader.interface';
 import { CommonModule } from '@angular/common';
 import { DynamicCellDirective } from '../shared/directive/dynamic-cell.directive';
@@ -8,6 +8,7 @@ import { ScheduleTableService } from '../shared/service/schedule-table.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ScheduleTableSortColumnComponent } from './schedule-table-sort-column/schedule-table-sort-column.component';
 import { ShiftCellComponent } from '../dynamic-cells/shift-cell/shift-cell.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 
 @Component({
@@ -18,7 +19,8 @@ import { ShiftCellComponent } from '../dynamic-cells/shift-cell/shift-cell.compo
     DynamicCellDirective,
     ScheduleTableFilterColumnComponent,
     ScheduleTableSortColumnComponent,
-    ShiftCellComponent
+    ShiftCellComponent,
+    ScrollingModule
   ],
   providers: [ScheduleTableService],
   templateUrl: './schedule-table.component.html',
@@ -35,7 +37,10 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
 
   private _unSubscribe$ = new Subject<void>();
 
-  constructor(public tableService: ScheduleTableService) { }
+  constructor(
+    public cdr: ChangeDetectorRef,
+    public tableService: ScheduleTableService,
+  ) { }
 
   ngOnInit(): void {
     this.tableService.columnFiltersObs.pipe(takeUntil(this._unSubscribe$)).subscribe((result) => {
@@ -51,7 +56,8 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
           items = items.filter((el) => el[key].toLowerCase().includes(result[key]));
       });
       this.tableService.setDataSource = items;
-    })
+    });
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -62,5 +68,9 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this._unSubscribe$.next();
     this._unSubscribe$.complete();
+  }
+
+  scroll_onChange() {
+    this.cdr.detectChanges();
   }
 }

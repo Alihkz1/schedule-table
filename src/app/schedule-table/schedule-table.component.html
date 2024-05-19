@@ -1,5 +1,6 @@
+<!-- <cdk-virtual-scroll-viewport itemSize="50" class="h-100 w-100" (scrolledIndexChange)="scroll_onChange()"> -->
 <table class="table h-100 w-100">
-    <thead class="overflow-hidden">
+    <thead>
         <tr>
             <th *ngFor="let header of headers" [ngStyle]="{ 'min-width' : header.width + 'px'}">
                 <div class="w-100 h-100 d-flex align-items-center justify-content-between ps-1">
@@ -40,20 +41,23 @@
         </ng-container>
         <ng-template #dataHasLength>
             <tbody class="h-100 w-100 overflow-auto">
-                <tr *ngFor="let row of tableService.finalDataSource; let i = index"
-                    [ngStyle]="{ 'height' : rowHeight + 'px'}">
-                    <td *ngFor="let header of headers" class="cell">
-                        <ng-container *ngIf="header.dynamicCellComponent" [column]="header" [row]="row"
-                            [onRowEvent]="onRowEvent" [component]="header.dynamicCellComponent" dynamicCell>
-                        </ng-container>
-                        <ng-container *ngIf="!header.dynamicCellComponent">
-                            <div class="d-flex justify-content-start align-items-center">
-                                {{ row[header.key] }}
-                            </div>
-                        </ng-container>
-                    </td>
-                </tr>
+                <!-- <ng-container *cdkVirtualFor="let row of tableService.finalDataSource; let i = index"> -->
+                <ng-container *ngFor="let row of tableService.finalDataSource; let i = index">
+                    <tr [ngStyle]="{ 'height' : rowHeight + 'px'}">
+                        <td *ngFor="let header of headers" class="cell">
+                            <ng-container *ngIf="header.dynamicCellComponent" [column]="header" [row]="row"
+                                [onRowEvent]="onRowEvent" [component]="header.dynamicCellComponent" dynamicCell>
+                            </ng-container>
+                            <ng-container *ngIf="!header.dynamicCellComponent">
+                                <div class="d-flex justify-content-start align-items-center">
+                                    {{ row[header.key] }}
+                                </div>
+                            </ng-container>
+                        </td>
+                    </tr>
+                </ng-container>
             </tbody>
         </ng-template>
     </ng-template>
 </table>
+<!-- </cdk-virtual-scroll-viewport> -->
