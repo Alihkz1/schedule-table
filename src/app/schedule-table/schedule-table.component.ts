@@ -62,41 +62,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
       this._changedWidth$.next(deltaX / 20);
     }
   }
-
-  /**
-  @description
-  columns width resize listeners **/
-
-  private resizing = false;
-  private startWidth: number;
-  private resizeColumn: any;
-
-  @HostListener('mousedown', ['$event'])
-  onMouseDown(event: any) {
-    if (event.target['classList'].contains('resizer')) {
-      this.resizing = true;
-      this.startWidth = event.clientX;
-    }
-  }
-
-  @HostListener('document:mouseup', ['$event'])
-  onMouseUp() {
-    if (this.resizing) {
-      this.resizing = false;
-    }
-  }
-
-  @HostListener('document:mousemove', ['$event'])
-  onMouseMove(event: any) {
-    if (this.resizing) {
-      const deltaX = event.clientX - this.startWidth;
-      const column: any = document.getElementsByClassName('th')[this.resizeColumn.index];
-      const newWidth = column.clientWidth + (deltaX / 100);
-      column.style['min-width'] = `${newWidth}px`;
-      column.style['max-width'] = `${newWidth}px`;
-    }
-  }
-
+  
   constructor(
     private _cdr: ChangeDetectorRef,
     public tableService: ScheduleTableService
