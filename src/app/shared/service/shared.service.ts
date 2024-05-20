@@ -1,13 +1,16 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs';
+import { Subject, map } from 'rxjs';
 
-export const ONSITE_TOKEN = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6IjE2MTJkZDEzLTkxMmYtNGRiMS1iZmFjLTQ4OWNiODM5OTM4YiIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjo2LCJhY2NvdW50TmFtZSI6IkhIQyBTViBTdC4gVmluY2VudCdzIE1lZGljYWwgQ2VudGVyIiwiaXAiOiIxOTIuMTY4LjIuMTczIiwibmVlZE1mYSI6ZmFsc2UsImFwcGxpY2F0aW9uSWQiOjEsImZvcmNlVG9DaGFuZ2VQYXNzIjpmYWxzZSwibWV0YURhdGEiOnt9LCJzeXN0ZW0iOiJsaXZlIiwicm9sZUdyb3VwSWQiOjM1LCJpYXQiOjE3MTYxMDE1MjQsImV4cCI6MTcxNjE4NzkyNH0.MtcJbqf1CTx9EM1nknXT5fb9oba5d-IcPb80BdgPfO9NYhRZ_YsYrKkIRMjZVYS0zroKGUbUX3x_ashyb0ShHw';
+export const ONSITE_TOKEN = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290Iiwic2FsdCI6ImM5YTc1N2EwLWQ4Y2QtNGZjYy1iOWQ4LTM3MWNhYmJmMTk4YSIsInVzZXJuYW1lIjoicm9vdCIsInVzZXJJZCI6MzksInJvbGUiOjE2LCJ1c2VyS2luZElkIjozLCJmdWxsTmFtZSI6IkFsaSBIYWRkYWQxIiwiYWNjb3VudElkIjo2LCJhY2NvdW50TmFtZSI6IkhIQyBTViBTdC4gVmluY2VudCdzIE1lZGljYWwgQ2VudGVyIiwiaXAiOiIxOTIuMTY4LjIuMTczIiwibmVlZE1mYSI6ZmFsc2UsImFwcGxpY2F0aW9uSWQiOjE1LCJmb3JjZVRvQ2hhbmdlUGFzcyI6ZmFsc2UsInN5c3RlbSI6ImxpdmUiLCJyb2xlR3JvdXBJZCI6MzUsImlhdCI6MTcxNjE4ODAyNSwiZXhwIjoxNzE2Mjc0MzU2fQ.t-WeEFKs8zGGEthSHEyEsZUXFRACbl75xnjFdpDPoI0_zJL099LR57w-GcrQHZwbhPJ7C6eb5htWiVaywrVIoA';
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
   get userKindID(): number { return 1; }
+  private colmunWidth$: Subject<number> = new Subject<number>();
+  public set setColumnWidth(width: number) { this.colmunWidth$.next(width) }
+  public get columnWidthAsObs() { return this.colmunWidth$.asObservable() }
 
   constructor(private http: HttpClient) { }
 
