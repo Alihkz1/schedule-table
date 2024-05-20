@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ScheduleTableComponent } from './schedule-table/schedule-table.component';
 import { MOCK_DATA } from './shared/mock-data.json';
-import { BehaviorSubject, Subscription, interval } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { IHeader } from './shared/model/IHeader.interface';
 import { SharedService } from './shared/service/shared.service';
 import { DEFAULT_END_DATE, DEFAULT_START_DATE } from './shared/constant/date.const';
@@ -74,11 +74,7 @@ export class AppComponent implements OnInit {
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef,
     private sharedService: SharedService,
-  ) {
-    interval(2000).subscribe(() => {
-      this.syncTable();
-    });
-  }
+  ) { }
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(event: any) {
@@ -86,7 +82,6 @@ export class AppComponent implements OnInit {
       this.resizingRed = true;
       this.redSplitterStartWidth = event.clientX;
     }
-
     if (event.target['classList'].contains('resize')) {
       this.resizing = true;
       this.startResizeHeight = event.clientY;
@@ -112,12 +107,12 @@ export class AppComponent implements OnInit {
       this.startResizeHeight = event.clientY;
     }
     if (this.resizingRed) {
-      const deltaX = this.redSplitterStartWidth - event.clientX;
-      const targetNode: any = document.getElementsByClassName(
-        'red-splitter'
-      )[0];
-      targetNode.style['min-width'] = `${targetNode.clientWidth - deltaX}px`;
-      targetNode.style['max-width'] = `${targetNode.clientWidth - deltaX}px`;
+      const deltaX = event.clientX - this.redSplitterStartWidth;
+      const splitter: any = document.getElementsByClassName('red-splitter')[0];
+      const targetWidth = splitter.clientWidth + deltaX / 10;
+      this.sharedService.setColumnWidth = targetWidth;
+      splitter.style['min-width'] = `${targetWidth}px`;
+      splitter.style['max-width'] = `${targetWidth}px`;
       this.cdr.detectChanges();
     }
   }
@@ -133,12 +128,24 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.initHeaders();
-    this.initData();
+    this.getData();
     this.getPositions();
-    this.toggleChange();
+    this.toggleChangeListener();
+    this.redColumnWidthListener();
   }
 
-  toggleChange() {
+  private redColumnWidthListener() {
+    /* red splitter column */
+    this.sharedService.columnWidthAsObs.subscribe((width: number) => {
+      if (width) {
+        const splitter: any = document.getElementsByClassName('down-column')[0];
+        splitter.style['min-width'] = `${width}px`;
+        splitter.style['max-width'] = `${width}px`;
+      }
+    });
+  }
+
+  private toggleChangeListener() {
     this._toggle$.subscribe((index: PROGRAMMED_TABLE_ENUM) => {
       let headers: IHeader[] = [];
       switch (index) {
@@ -147,13 +154,23 @@ export class AppComponent implements OnInit {
           headers = [
             {
               key: 'Date',
-              title: 'Date'
+              title: 'Shift Name',
+              className: 'down-column'
+            },
+            {
+              key: 'Date',
+              title: 'Shift Name'
             }
           ]
           break;
         case PROGRAMMED_TABLE_ENUM.BLOCK:
           this.getBlocks({ PositionList: JSON.stringify(this.positionsFormControl.value) });
           headers = [
+            {
+              key: 'BlockName',
+              title: 'Block Name',
+              className: 'down-column'
+            },
             {
               key: 'BlockName',
               title: 'Block Name',
@@ -165,7 +182,12 @@ export class AppComponent implements OnInit {
           headers = [
             {
               key: 'intervalName',
-              title: 'Interval Name'
+              title: 'Intervals',
+              className: 'down-column'
+            },
+            {
+              key: 'intervalName',
+              title: 'Intervals'
             }
           ]
           break;
@@ -174,36 +196,36 @@ export class AppComponent implements OnInit {
     })
   }
 
-  getPositions() {
+  private getPositions() {
     this.sharedService.getPositions().subscribe((list: any[]) => {
       this.positions = list
     })
   }
 
-  getBlocks(model: any) {
+  private getBlocks(model: any) {
     this.sharedService.getBlocks(model).subscribe((list: any[]) => {
       this._programmedDataSource$.next(list);
     })
   }
 
-  getShifts(model: any) {
+  private getShifts(model: any) {
     this.sharedService.getShifts(model).subscribe((list: any[]) => {
       this._programmedDataSource$.next(list);
     })
   }
 
-  getIntervals(model: any) {
+  private getIntervals(model: any) {
     this.sharedService.getIntervals(model).subscribe((list: any[]) => {
       this._programmedDataSource$.next(list);
     })
   }
 
-  table_onRowEvent(event: IRowEvent) {
+  public table_onRowEvent(event: IRowEvent): void {
     console.log(event);
     this.drawer.toggle();
   }
 
-  toggle_onClick(index: PROGRAMMED_TABLE_ENUM) {
+  public toggle_onClick(index: PROGRAMMED_TABLE_ENUM) {
     this.selectedToggle = index;
     this._toggle$.next(index);
   }
@@ -212,13 +234,13 @@ export class AppComponent implements OnInit {
 
   available_onClick() { }
 
-  initData() {
-    // this.initMockData();
-    this.mockDataLoading = true;
-    this.dataLoading = this.sharedService.getWorkCalender().subscribe((data) => {
-      this.mockDataLoading = false;
-      this._dataSource$.next(data);
-    });
+  getData() {
+    this.initMockData();
+    // this.mockDataLoading = true;
+    // this.dataLoading = this.sharedService.getWorkCalender().subscribe((data) => {
+    //   this.mockDataLoading = false;
+    //   this._dataSource$.next(data);
+    // });
   }
 
   initMockData() {
@@ -242,60 +264,8 @@ export class AppComponent implements OnInit {
     this.initDefaultHeaders();
   }
 
-  syncTable() {
-    const targetNode = document.getElementsByClassName(
-      'red-splitter'
-    )[0]
-
-    // this.redSplitterWidth = targetNode.clientWidth;
-
-    if (targetNode) {
-
-      let bottomCells: any = document.getElementsByClassName(
-        'shift-splitter'
-      );
-
-      let bottomBlockCell: any = document.getElementsByClassName(
-        'block-splitter'
-      );
-
-      let bottomIntervalCell: any = document.getElementsByClassName(
-        'interval-splitter'
-      );
-
-      // let columnWidth = Number.parseInt(targetNode.offsetWidth);
-
-
-
-      // for (let i = 0; i < bottomCells.length; i++) {
-      //   bottomCells[i].style['max-width'] = targetNode.offsetLeft + w1 + 'px';
-      //   bottomCells[i].style['min-width'] = targetNode.offsetLeft + w1 + 'px';
-      // }
-
-      // for (let i = 0; i < bottomBlockCell.length; i++) {
-      //   bottomBlockCell[i].style['max-width'] =
-      //     targetNode.offsetLeft + w1 + 'px';
-      //   bottomBlockCell[i].style['min-width'] =
-      //     targetNode.offsetLeft + w1 + 'px';
-      // }
-
-      // for (let i = 0; i < bottomIntervalCell.length; i++) {
-      //   bottomIntervalCell[i].style['max-width'] =
-      //     targetNode.offsetLeft + w1 + 'px';
-      //   bottomIntervalCell[i].style['min-width'] =
-      //     targetNode.offsetLeft + w1 + 'px';
-      // }
-    }
-  }
-
   initDefaultHeaders() {
     this.headers = [
-      // {
-      //   title: '#',
-      //   key: 'i',
-      //   sortable: true,
-      //   width: 20
-      // },
       {
         title: 'RN Name',
         key: 'FullName',

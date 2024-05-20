@@ -2,27 +2,29 @@
 <table class="table h-100 w-100">
     <thead>
         <tr>
-            <th *ngFor="let header of headers"
-                [ngClass]="header.className ?? ''">
-                <div class="w-100 h-100 d-flex align-items-center justify-content-between ps-1">
+            <th class="th" *ngFor="let header of headers; let i = index" [ngClass]="header.className ?? ''">
+                <div class="h-100 d-flex align-items-center justify-content-between ps-1">
                     <div>
 
+                        <!-- title -->
                         {{ header.title }}
 
                         <!-- sort  -->
-                        <ng-container *ngIf="header.sortable">
-                            <schedule-table-sort-column [header]="header">
-                            </schedule-table-sort-column>
-                        </ng-container>
+                        <schedule-table-sort-column *ngIf="header.sortable" [header]="header">
+                        </schedule-table-sort-column>
 
                     </div>
-
-                    <!-- filter -->
-                    <ng-container *ngIf="header.filterable">
-                        <schedule-table-filter-column class="filter-column" [header]="header">
+                    <div class="d-flex h-100 align-items-center justify-content-between">
+                        <!-- filter -->
+                        <schedule-table-filter-column *ngIf="header.filterable" class="filter-column" [header]="header">
                         </schedule-table-filter-column>
-                    </ng-container>
+
+                        <!-- resize -->
+                        <div class="resizer" (mousedown)="resizeColumn_onMouseDown($event ,i)">
+                        </div>
+                    </div>
                 </div>
+
             </th>
         </tr>
     </thead>
