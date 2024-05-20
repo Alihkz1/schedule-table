@@ -5,7 +5,7 @@ import { DynamicCellDirective } from '../shared/directive/dynamic-cell.directive
 import { IRowEvent } from '../shared/model/IRowEvent.interface';
 import { ScheduleTableFilterColumnComponent } from './schedule-table-filter-column/schedule-table-filter-column.component';
 import { ScheduleTableService } from '../shared/service/schedule-table.service';
-import { Subject, debounceTime, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { ScheduleTableSortColumnComponent } from './schedule-table-sort-column/schedule-table-sort-column.component';
 import { ShiftCellComponent } from '../dynamic-cells/shift-cell/shift-cell.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';

@@ -3,4 +3,6 @@ used packages are listed below:
 
 -bootstrap 5
 -Ngbmodule 
--CdkAccordionModule
+-Angular Material: 
+  -CdkAccordionModule
+  -ScrollingModule
