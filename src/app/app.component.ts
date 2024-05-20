@@ -62,6 +62,9 @@ export class AppComponent implements OnInit {
   private _programmedDataSource$ = new BehaviorSubject<any[]>([]);
   public get programmedDataSource() { return this._programmedDataSource$.getValue() };
 
+  /**
+  @description
+  redSplitter column resize listeners **/
   private resizing = false;
   public topDivInitialHeight = 600;
   public bottomDivInitialHeight = 400;
@@ -69,13 +72,6 @@ export class AppComponent implements OnInit {
 
   private resizingRed = false;
   private redSplitterStartWidth: number;
-
-  constructor(
-    private datePipe: DatePipe,
-    private cdr: ChangeDetectorRef,
-    private sharedService: SharedService,
-  ) { }
-
   @HostListener('mousedown', ['$event'])
   onMouseDown(event: any) {
     if (event.target['classList'].contains('red-splitter')) {
@@ -109,13 +105,20 @@ export class AppComponent implements OnInit {
     if (this.resizingRed) {
       const deltaX = event.clientX - this.redSplitterStartWidth;
       const splitter: any = document.getElementsByClassName('red-splitter')[0];
-      const targetWidth = splitter.clientWidth + deltaX / 10;
+      const targetWidth = splitter.clientWidth + (deltaX / 20);
       this.sharedService.setColumnWidth = targetWidth;
       splitter.style['min-width'] = `${targetWidth}px`;
       splitter.style['max-width'] = `${targetWidth}px`;
       this.cdr.detectChanges();
     }
   }
+
+
+  constructor(
+    private datePipe: DatePipe,
+    private cdr: ChangeDetectorRef,
+    private sharedService: SharedService,
+  ) { }
 
   public resize_onEvent(event: MouseEvent) {
     if (this.resizing) {

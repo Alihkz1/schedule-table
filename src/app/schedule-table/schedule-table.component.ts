@@ -45,7 +45,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
   private resizeColumn: any;
 
   @HostListener('mousedown', ['$event'])
-  onMouseDown(event: any) {
+  onMouseDown(event: any) {    
     if (event.target['classList'].contains('resizer')) {
       this.resizing = true;
       this.startWidth = event.clientX;
@@ -62,7 +62,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
       this._changedWidth$.next(deltaX / 20);
     }
   }
-  
+
   constructor(
     private _cdr: ChangeDetectorRef,
     public tableService: ScheduleTableService
@@ -103,7 +103,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
   private _columnsWidthChangeListener() {
     this._changedWidth$
       .pipe(
-        debounceTime(2),
+        // debounceTime(2),
         takeUntil(this._unSubscribe$)
       )
       .subscribe((value) => {
@@ -111,6 +111,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
         const newWidth = column.clientWidth + (value);
         column.style['min-width'] = `${newWidth}px`;
         column.style['max-width'] = `${newWidth}px`;
+        this._cdr.detectChanges();
       })
   }
 
