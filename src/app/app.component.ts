@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ScheduleTableComponent } from './schedule-table/schedule-table.component';
 import { MOCK_DATA } from './shared/mock-data.json';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, finalize } from 'rxjs';
 import { IHeader } from './shared/model/IHeader.interface';
 import { SharedService } from './shared/service/shared.service';
 import { DEFAULT_END_DATE, DEFAULT_START_DATE } from './shared/constant/date.const';
@@ -206,19 +206,28 @@ export class AppComponent implements OnInit {
   }
 
   private getBlocks(model: any) {
-    this.sharedService.getBlocks(model).subscribe((list: any[]) => {
+    this.programmedLoading = true;
+    this.sharedService.getBlocks(model)
+    .pipe(finalize(() => { this.programmedLoading = false }))
+    .subscribe((list: any[]) => {
       this._programmedDataSource$.next(list);
     })
   }
 
   private getShifts(model: any) {
-    this.sharedService.getShifts(model).subscribe((list: any[]) => {
-      this._programmedDataSource$.next(list);
-    })
+    this.programmedLoading = true;
+    this.sharedService.getShifts(model)
+      .pipe(finalize(() => { this.programmedLoading = false }))
+      .subscribe((list: any[]) => {
+        this._programmedDataSource$.next(list);
+      })
   }
 
   private getIntervals(model: any) {
-    this.sharedService.getIntervals(model).subscribe((list: any[]) => {
+    this.programmedLoading = true;
+    this.sharedService.getIntervals(model)
+    .pipe(finalize(() => { this.programmedLoading = false }))
+    .subscribe((list: any[]) => {
       this._programmedDataSource$.next(list);
     })
   }

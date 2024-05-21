@@ -25,7 +25,7 @@
             <button class="normal-button" [class.primary-button]="selectedToggle === 2"
               (click)="toggle_onClick(2);">Hours</button>
           </div>
-          <div class="mt-2">
+          <div class="mt-1">
             <mat-form-field>
               <mat-label>Position</mat-label>
               <mat-select [formControl]="positionsFormControl" multiple>
@@ -42,10 +42,9 @@
             </button>
           </div>
         </div>
-        <div class="overflow-auto w-100 expand-container">
+        <div class="overflow-auto flex-grow-1 w-100 expand-container">
           <schedule-table [class.overflow-y-hidden]="programmedLoading" class="w-100 overflow-auto"
-            [dataSource]="programmedDataSource" [headers]="programmedHeaders" (onRowEvent)="table_onRowEvent($event)">
-            >
+            [dataSource]="programmedDataSource" [loading]="programmedLoading" [headers]="programmedHeaders" (onRowEvent)="table_onRowEvent($event)">
           </schedule-table>
         </div>
       </div>
