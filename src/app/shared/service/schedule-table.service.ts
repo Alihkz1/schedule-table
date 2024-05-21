@@ -19,6 +19,10 @@ export class ScheduleTableService {
   public set setRealDataSource(value: any[]) { this._realDataSource$.next(value) }
   public get realDataSourceObs(): Observable<any[]> { return this._realDataSource$.asObservable() }
 
+  public get finalDataSourceAsObs(): Observable<any[]> {
+    if (this.dataSource.length) return this.dataSourceObs;
+    else return this.realDataSourceObs;
+  }
   public get finalDataSource(): any[] {
     if (this.dataSource.length) return this.dataSource;
     else return this.realDataSource;

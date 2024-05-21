@@ -12,6 +12,11 @@ th {
     height: 55px;
 }
 
+td {
+    min-width: 200px;
+    padding-left: 5px;
+}
+
 tbody {
     min-height: 300px;
 }

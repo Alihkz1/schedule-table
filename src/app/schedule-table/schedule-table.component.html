@@ -1,40 +1,41 @@
-<cdk-virtual-scroll-viewport itemSize="50" class="h-100 w-100" (scrolledIndexChange)="scroll_onChange()">
+<progress-bar *ngIf="loading"></progress-bar>
 
-    <progress-bar *ngIf="loading"></progress-bar>
+<table class="table w-100 mb-0">
+    <thead>
+        <tr>
+            <th [attr.id]="header.key" class="th" *ngFor="let header of headers; let i = index"
+                [ngClass]="header.className || ''">
+                <div class="h-100 d-flex align-items-center justify-content-between ps-1">
+                    <div>
 
-    <table class="table h-100 w-100">
-        <thead>
-            <tr>
-                <th class="th" *ngFor="let header of headers; let i = index" [ngClass]="header.className || ''">
-                    <div class="h-100 d-flex align-items-center justify-content-between ps-1">
-                        <div>
+                        <!-- title -->
+                        <span class="user-none">
+                            {{ header.title }}
+                        </span>
 
-                            <!-- title -->
-                            <span class="user-none">
-                                {{ header.title }}
-                            </span>
+                        <!-- sort  -->
+                        <schedule-table-sort-column *ngIf="header.sortable" [header]="header">
+                        </schedule-table-sort-column>
 
-                            <!-- sort  -->
-                            <schedule-table-sort-column *ngIf="header.sortable" [header]="header">
-                            </schedule-table-sort-column>
-
-                        </div>
-                        <div class="d-flex h-100 align-items-center justify-content-between">
-                            <!-- filter -->
-                            <schedule-table-filter-column *ngIf="header.filterable" class="filter-column"
-                                [header]="header">
-                            </schedule-table-filter-column>
-                            <!-- resize -->
-                            <div class="resizer" *ngIf="header.className !== 'red-splitter'"
-                                (mousedown)="resizeColumn_onMouseDown($event ,i)">
-                            </div>
+                    </div>
+                    <div class="d-flex h-100 align-items-center justify-content-between">
+                        <!-- filter -->
+                        <schedule-table-filter-column *ngIf="header.filterable" class="filter-column" [header]="header">
+                        </schedule-table-filter-column>
+                        <!-- resize -->
+                        <div class="resizer" *ngIf="header.className !== 'red-splitter'"
+                            (mousedown)="resizeColumn_onMouseDown($event ,i)">
                         </div>
                     </div>
+                </div>
 
-                </th>
-            </tr>
-        </thead>
-        
+            </th>
+        </tr>
+    </thead>
+</table>
+
+<cdk-virtual-scroll-viewport itemSize="50" class="h-100 w-100" (scrolledIndexChange)="scroll_onChange()">
+    <table>
         <ng-container *ngIf="tableService.finalDataSource.length === 0; else dataHasLength">
             <div class="empty-container">
                 <div class="empty-row">
@@ -45,9 +46,10 @@
         </ng-container>
         <ng-template #dataHasLength>
             <tbody class="h-100 w-100 overflow-auto">
-                <ng-container *cdkVirtualFor="let row of tableService.finalDataSource; let i = index">
+                <ng-container *cdkVirtualFor="let row of tableService.finalDataSourceAsObs; trackBy: trackById">
                     <tr [ngStyle]="{ 'height' : rowHeight + 'px'}">
-                        <td *ngFor="let header of headers" class="cell" [ngClass]="header.className || ''">
+                        <td *ngFor="let header of headers" class="cell" [ngClass]="header.className || ''"
+                            [attr.id]="header.key">
                             <ng-container *ngIf="header.dynamicCellComponent" [column]="header" [row]="row"
                                 [onRowEvent]="onRowEvent" [component]="header.dynamicCellComponent" dynamicCell>
                             </ng-container>
@@ -61,6 +63,5 @@
                 </ng-container>
             </tbody>
         </ng-template>
-        
     </table>
 </cdk-virtual-scroll-viewport>

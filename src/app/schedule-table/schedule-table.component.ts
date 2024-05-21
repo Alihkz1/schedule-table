@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { IHeader } from '../shared/model/IHeader.interface';
 import { CommonModule } from '@angular/common';
 import { DynamicCellDirective } from '../shared/directive/dynamic-cell.directive';
@@ -36,32 +36,36 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
   @Output() onRowEvent: EventEmitter<IRowEvent> = new EventEmitter();
 
   private _unSubscribe$ = new Subject<void>();
-  private _changedWidth$ = new Subject<number>();
+  private _changeWidthOfAnyColumn$ = new Subject<number>();
+
+  public trackById(index: number, item: any) { return item.EmployeeID; }
 
   /**
   @description
   columns width resize listeners **/
 
-  private resizing = false;
+  private resizingAnyColumn = false;
   private startWidth: number;
   private resizeColumn: any;
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(event: any) {
+    console.log(event);
     if (event.target['classList'].contains('resizer')) {
-      this.resizing = true;
+      this.resizingAnyColumn = true;
       this.startWidth = event.clientX;
+
     }
   }
 
   @HostListener('document:mouseup', ['$event'])
-  onMouseUp() { if (this.resizing) { this.resizing = false; } }
+  onMouseUp() { if (this.resizingAnyColumn) { this.resizingAnyColumn = false; } }
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: any) {
-    if (this.resizing) {
+    if (this.resizingAnyColumn) {
       const deltaX = event.clientX - this.startWidth;
-      this._changedWidth$.next(deltaX / 20);
+      this._changeWidthOfAnyColumn$.next(deltaX / 20);
     }
   }
 
@@ -103,16 +107,22 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _columnsWidthChangeListener() {
-    this._changedWidth$
+    this._changeWidthOfAnyColumn$
       .pipe(
-        // debounceTime(2),
         takeUntil(this._unSubscribe$)
       )
       .subscribe((value) => {
         const column: any = document.getElementsByClassName('th')[this.resizeColumn.index];
-        const newWidth = column.clientWidth + (value);
+        const newWidth = column.clientWidth + value;
         column.style['min-width'] = `${newWidth}px`;
         column.style['max-width'] = `${newWidth}px`;
+
+        const columnCells: any = document.querySelectorAll('#FullName');
+        columnCells.forEach((el: any) => {
+          el.style['min-width'] = `${newWidth}px`;
+          el.style['max-width'] = `${newWidth}px`;
+        })
+        
         this._cdr.detectChanges();
       })
   }
