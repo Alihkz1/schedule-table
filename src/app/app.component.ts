@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
   selectedToggle = 1;
   positionsFormControl = new FormControl();
 
-  private _toggle$ = new BehaviorSubject<PROGRAMMED_TABLE_ENUM>(PROGRAMMED_TABLE_ENUM.BLOCK);
+  private _ProgrammedToggle$ = new BehaviorSubject<PROGRAMMED_TABLE_ENUM>(PROGRAMMED_TABLE_ENUM.BLOCK);
 
   private _dataSource$ = new BehaviorSubject<any[]>([]);
   public get dataSource() { return this._dataSource$.getValue() };
@@ -149,7 +149,7 @@ export class AppComponent implements OnInit {
   }
 
   private toggleChangeListener() {
-    this._toggle$.subscribe((index: PROGRAMMED_TABLE_ENUM) => {
+    this._ProgrammedToggle$.subscribe((index: PROGRAMMED_TABLE_ENUM) => {
       let headers: IHeader[] = [];
       switch (index) {
         case PROGRAMMED_TABLE_ENUM.SHIFT:
@@ -230,7 +230,7 @@ export class AppComponent implements OnInit {
 
   public toggle_onClick(index: PROGRAMMED_TABLE_ENUM) {
     this.selectedToggle = index;
-    this._toggle$.next(index);
+    this._ProgrammedToggle$.next(index);
   }
 
   apply_onClick() { }
@@ -238,12 +238,12 @@ export class AppComponent implements OnInit {
   available_onClick() { }
 
   getData() {
-    this.initMockData();
-    // this.mockDataLoading = true;
-    // this.dataLoading = this.sharedService.getWorkCalender().subscribe((data) => {
-    //   this.mockDataLoading = false;
-    //   this._dataSource$.next(data);
-    // });
+    // this.initMockData();
+    this.mockDataLoading = true;
+    this.dataLoading = this.sharedService.getWorkCalender().subscribe((data) => {
+      this.mockDataLoading = false;
+      this._dataSource$.next(data);
+    });
   }
 
   initMockData() {
@@ -310,7 +310,7 @@ export class AppComponent implements OnInit {
     dates.forEach((el, i) => {
       this.headers.push({
         key: 'day' + (i + 1),
-        title: el ?? '',
+        title: el || '',
         sortable: true,
         width: 250,
         dynamicCellComponent: ShiftCellComponent

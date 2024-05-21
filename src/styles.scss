@@ -44,8 +44,13 @@ body {
 
 .red-splitter {
     border-right: solid 6px #ff4081 !important;
+    cursor: ew-resize;
 }
 
 .flex-grow-1 {
     flex-grow: 1 !important;
+}
+
+.user-none {
+    user-select: none !important;
 }

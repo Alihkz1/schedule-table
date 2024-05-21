@@ -9,6 +9,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ScheduleTableSortColumnComponent } from './schedule-table-sort-column/schedule-table-sort-column.component';
 import { ShiftCellComponent } from '../dynamic-cells/shift-cell/shift-cell.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ProgressBarComponent } from '../shared/component/progress-bar/progress-bar.component';
 
 
 @Component({
@@ -19,8 +20,9 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     DynamicCellDirective,
     ScheduleTableFilterColumnComponent,
     ScheduleTableSortColumnComponent,
+    ProgressBarComponent,
     ShiftCellComponent,
-    ScrollingModule
+    ScrollingModule,
   ],
   providers: [ScheduleTableService],
   templateUrl: './schedule-table.component.html',
@@ -45,7 +47,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
   private resizeColumn: any;
 
   @HostListener('mousedown', ['$event'])
-  onMouseDown(event: any) {    
+  onMouseDown(event: any) {
     if (event.target['classList'].contains('resizer')) {
       this.resizing = true;
       this.startWidth = event.clientX;
