@@ -1,8 +1,10 @@
 # EdnurseScheduleTable
-used packages are listed below:
+
+Used packages are listed below:
 
 -bootstrap 5
--Ngbmodule 
--Angular Material: 
-  -CdkAccordionModule
-  -ScrollingModule
+-Ngbmodule <!-- remove -->
+-Angular Material:
+-CdkAccordionModule
+-CdkMenuModule
+-ScrollingModule

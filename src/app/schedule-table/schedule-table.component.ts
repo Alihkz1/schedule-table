@@ -43,17 +43,17 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
   /**
   @description
   columns width resize listeners **/
-
   private resizingAnyColumn = false;
   private startWidth: number;
   private resizeColumn: any;
+  private resizeColumnKey: string;
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(event: any) {
-    console.log(event);
     if (event.target['classList'].contains('resizer')) {
       this.resizingAnyColumn = true;
       this.startWidth = event.clientX;
+      this.resizeColumnKey = event.srcElement.id;
 
     }
   }
@@ -111,18 +111,19 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         takeUntil(this._unSubscribe$)
       )
-      .subscribe((value) => {
+      .subscribe((value: number) => {
         const column: any = document.getElementsByClassName('th')[this.resizeColumn.index];
         const newWidth = column.clientWidth + value;
+
         column.style['min-width'] = `${newWidth}px`;
         column.style['max-width'] = `${newWidth}px`;
 
-        const columnCells: any = document.querySelectorAll('#FullName');
+        const columnCells: any = document.querySelectorAll(`#${this.resizeColumnKey}`);
         columnCells.forEach((el: any) => {
           el.style['min-width'] = `${newWidth}px`;
           el.style['max-width'] = `${newWidth}px`;
         })
-        
+
         this._cdr.detectChanges();
       })
   }

@@ -1,9 +1,7 @@
-<span class="filter" [ngbPopover]="popoverContent" [autoClose]="false" placement="bottom" #popover="ngbPopover">
-    <img class="filter-icon" src="assets/svg/filter.svg" alt="filter">
-</span>
+<img class="filter-icon" src="assets/svg/filter.svg" alt="filter" [cdkMenuTriggerFor]="menu" xPosition="before">
 
-<ng-template #popoverContent>
-    <div class="d-flex flex-column justify-content-between w-100 h-100">
+<ng-template #menu>
+    <div class="menu d-flex flex-column justify-content-between" cdkMenu>
         <div class="form-floating mb-3">
             <input [formControl]="formControl" (keypress)="handleKeyPress($event)" class="form-control"
                 id="containsInput">

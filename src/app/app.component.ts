@@ -299,7 +299,7 @@ export class AppComponent implements OnInit {
         filterable: true,
         sortable: true,
         width: 250,
-        className: 'red-splitter'
+        // className: 'red-splitter'
       },
     ];
     const dates = [];

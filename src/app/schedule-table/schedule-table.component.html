@@ -3,8 +3,8 @@
 <table class="table w-100 mb-0">
     <thead>
         <tr>
-            <th [attr.id]="header.key" class="th" *ngFor="let header of headers; let i = index"
-                [ngClass]="header.className || ''">
+            <th class="th" *ngFor="let header of headers; let i = index" [ngClass]="header.className || ''"
+                [ngStyle]="{ 'min-width' : header.width + 'px' }">
                 <div class="h-100 d-flex align-items-center justify-content-between ps-1">
                     <div>
 
@@ -23,8 +23,9 @@
                         <schedule-table-filter-column *ngIf="header.filterable" class="filter-column" [header]="header">
                         </schedule-table-filter-column>
                         <!-- resize -->
-                        <div class="resizer" *ngIf="header.className !== 'red-splitter'"
+                        <div class="resizer" [attr.id]="header.key"
                             (mousedown)="resizeColumn_onMouseDown($event ,i)">
+                            <!-- todo: remove red-splitter condition -->
                         </div>
                     </div>
                 </div>
@@ -49,7 +50,7 @@
                 <ng-container *cdkVirtualFor="let row of tableService.finalDataSourceAsObs; trackBy: trackById">
                     <tr [ngStyle]="{ 'height' : rowHeight + 'px'}">
                         <td *ngFor="let header of headers" class="cell" [ngClass]="header.className || ''"
-                            [attr.id]="header.key">
+                            [attr.id]="header.key" [ngStyle]="{ 'min-width' : header.width + 'px' }">
                             <ng-container *ngIf="header.dynamicCellComponent" [column]="header" [row]="row"
                                 [onRowEvent]="onRowEvent" [component]="header.dynamicCellComponent" dynamicCell>
                             </ng-container>

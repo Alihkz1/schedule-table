@@ -1,19 +1,19 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { IHeader } from '../../shared/model/IHeader.interface';
 import { ScheduleTableService } from '../../shared/service/schedule-table.service';
+import { CdkMenuModule, CdkMenuTrigger } from '@angular/cdk/menu';
 
 @Component({
   selector: 'schedule-table-filter-column',
   standalone: true,
-  imports: [NgbModule, ReactiveFormsModule],
+  imports: [CdkMenuModule, ReactiveFormsModule],
   templateUrl: './schedule-table-filter-column.component.html',
   styleUrl: './schedule-table-filter-column.component.scss'
 })
 export class ScheduleTableFilterColumnComponent {
   @Input() header: IHeader;
-  @ViewChild('popover') popover: NgbPopover;
+  @ViewChild(CdkMenuTrigger) menu: CdkMenuTrigger;
 
   formControl = new FormControl('');
 
@@ -22,13 +22,13 @@ export class ScheduleTableFilterColumnComponent {
   saveFilter_onClick() {
     const formValue = this.formControl.value?.toLowerCase();
     if (!formValue?.length) {
-      this.popover.close();
+      this.menu.close();
       return;
     }
     const columnFilters = this.tableService.columnFilters;
     columnFilters[this.header.key] = formValue;
     this.tableService.setColumnFilters = columnFilters;
-    this.popover.close();
+    this.menu.close();
   }
 
   handleKeyPress(event: KeyboardEvent) {
@@ -37,7 +37,7 @@ export class ScheduleTableFilterColumnComponent {
 
   clearFilter_onClick() {
     this.formControl.reset();
-    this.popover.close();
+    this.menu.close();
     const columnFilters = this.tableService.columnFilters;
     delete columnFilters[this.header.key];
     this.tableService.setColumnFilters = columnFilters;
