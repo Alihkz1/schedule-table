@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { IHeader } from '../shared/model/IHeader.interface';
 import { CommonModule } from '@angular/common';
 import { DynamicCellDirective } from '../shared/directive/dynamic-cell.directive';
@@ -54,7 +54,6 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
       this.resizingAnyColumn = true;
       this.startWidth = event.clientX;
       this.resizeColumnKey = event.srcElement.id;
-
     }
   }
 
@@ -71,6 +70,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private _cdr: ChangeDetectorRef,
+    private _elementRef: ElementRef,
     public tableService: ScheduleTableService
   ) { }
 
@@ -106,6 +106,9 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  // change width -> display flex column is damaged
+  // make change column width independent to instances ( change path of selecting elements )
+
   private _columnsWidthChangeListener() {
     this._changeWidthOfAnyColumn$
       .pipe(
@@ -119,6 +122,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges, OnDestroy {
         column.style['max-width'] = `${newWidth}px`;
 
         const columnCells: any = document.querySelectorAll(`#${this.resizeColumnKey}`);
+
         columnCells.forEach((el: any) => {
           el.style['min-width'] = `${newWidth}px`;
           el.style['max-width'] = `${newWidth}px`;

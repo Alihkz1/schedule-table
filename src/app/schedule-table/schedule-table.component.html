@@ -2,32 +2,31 @@
 
 <table class="table w-100 mb-0">
     <thead>
-        <tr>
+        <tr class="d-flex">
             <th class="th" *ngFor="let header of headers; let i = index" [ngClass]="header.className || ''"
                 [ngStyle]="{ 'min-width' : header.width + 'px' }">
-                <div class="h-100 d-flex align-items-center justify-content-between ps-1">
-                    <div>
+                <div>
 
-                        <!-- title -->
-                        <span class="user-none">
-                            {{ header.title }}
-                        </span>
+                    <!-- title -->
+                    <span class="user-none">
+                        {{ header.title }}
+                    </span>
 
-                        <!-- sort  -->
-                        <schedule-table-sort-column *ngIf="header.sortable" [header]="header">
-                        </schedule-table-sort-column>
+                    <!-- sort  -->
+                    <schedule-table-sort-column *ngIf="header.sortable" [header]="header">
+                    </schedule-table-sort-column>
 
+                </div>
+                <div class="d-flex h-100 align-items-center justify-content-between">
+
+                    <!-- filter -->
+                    <schedule-table-filter-column *ngIf="header.filterable" class="filter-column" [header]="header">
+                    </schedule-table-filter-column>
+
+                    <!-- resize -->
+                    <div class="resizer" [attr.id]="header.key" (mousedown)="resizeColumn_onMouseDown($event ,i)">
                     </div>
-                    <div class="d-flex h-100 align-items-center justify-content-between">
-                        <!-- filter -->
-                        <schedule-table-filter-column *ngIf="header.filterable" class="filter-column" [header]="header">
-                        </schedule-table-filter-column>
-                        <!-- resize -->
-                        <div class="resizer" [attr.id]="header.key"
-                            (mousedown)="resizeColumn_onMouseDown($event ,i)">
-                            <!-- todo: remove red-splitter condition -->
-                        </div>
-                    </div>
+
                 </div>
 
             </th>

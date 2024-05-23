@@ -6,8 +6,11 @@
       </div>
     </mat-drawer>
     <mat-drawer-content class="overflow-hidden">
-      <schedule-table [class.overflow-y-hidden]="mockDataLoading" class="w-100 overflow-hidden" [dataSource]="dataSource"
-        [headers]="headers" [loading]="mockDataLoading" (onRowEvent)="table_onRowEvent($event)">
+      <schedule-table
+      [dataSource]="dataSource"
+      [headers]="headers" 
+      [loading]="mockDataLoading" 
+      (onRowEvent)="table_onRowEvent($event)">
       </schedule-table>
     </mat-drawer-content>
   </mat-drawer-container>
@@ -43,8 +46,11 @@
           </div>
         </div>
         <div class="flex-grow-1 w-100 expand-container">
-          <schedule-table [class.overflow-y-hidden]="programmedLoading" class="w-100 overflow-auto"
-            [dataSource]="programmedDataSource" [loading]="programmedLoading" [headers]="programmedHeaders" (onRowEvent)="table_onRowEvent($event)">
+          <schedule-table
+            [dataSource]="programmedDataSource"
+            [loading]="programmedLoading" 
+            [headers]="programmedHeaders" 
+            (onRowEvent)="table_onRowEvent($event)">
           </schedule-table>
         </div>
       </div>

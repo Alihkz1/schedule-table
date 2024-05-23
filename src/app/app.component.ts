@@ -172,7 +172,7 @@ export class AppComponent implements OnInit {
             {
               key: 'BlockName',
               title: 'Block Name',
-              className: 'down-column'
+              className: 'down-column',
             },
             {
               key: 'BlockName',
@@ -208,10 +208,10 @@ export class AppComponent implements OnInit {
   private getBlocks(model: any) {
     this.programmedLoading = true;
     this.sharedService.getBlocks(model)
-    .pipe(finalize(() => { this.programmedLoading = false }))
-    .subscribe((list: any[]) => {
-      this._programmedDataSource$.next(list);
-    })
+      .pipe(finalize(() => { this.programmedLoading = false }))
+      .subscribe((list: any[]) => {
+        this._programmedDataSource$.next(list);
+      })
   }
 
   private getShifts(model: any) {
@@ -226,10 +226,10 @@ export class AppComponent implements OnInit {
   private getIntervals(model: any) {
     this.programmedLoading = true;
     this.sharedService.getIntervals(model)
-    .pipe(finalize(() => { this.programmedLoading = false }))
-    .subscribe((list: any[]) => {
-      this._programmedDataSource$.next(list);
-    })
+      .pipe(finalize(() => { this.programmedLoading = false }))
+      .subscribe((list: any[]) => {
+        this._programmedDataSource$.next(list);
+      })
   }
 
   public table_onRowEvent(event: IRowEvent): void {
